@@ -2666,6 +2666,389 @@ future_date_ogtt_test_done AS (
 ),
 
 
+missing_is_on_arvs AS (
+  -- Missing is_on_arvs (only when hiv_test_result = '1' i.e., HIV positive)
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_on_arvs' AS variable,
+    'Missing is_on_arvs (HIV positive but ARV status not recorded)' AS issue,
+    is_on_arvs AS current_value
+  FROM maternal_core
+  WHERE (is_on_arvs IS NULL OR TRIM(is_on_arvs) = '')
+    AND hiv_test_result = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-05 14:47:49'
+),
+
+
+missing_arvs_used AS (
+  -- Missing arvs_used (only when is_on_arvs = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'arvs_used' AS variable,
+    'Missing arvs_used (On ARVs = Yes but no ARV type recorded)' AS issue,
+    arvs_used AS current_value
+  FROM maternal_core
+  WHERE (arvs_used IS NULL OR TRIM(arvs_used) = '')
+    AND is_on_arvs = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-05 14:47:49'
+),
+
+
+missing_date_arvs_initiation AS (
+  -- Missing date_arvs_initiation (only when is_on_arvs = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_arvs_initiation' AS variable,
+    'Missing date_arvs_initiation (On ARVs = Yes but no initiation date recorded)' AS issue,
+    date_arvs_initiation AS current_value
+  FROM maternal_core
+  WHERE (date_arvs_initiation IS NULL OR TRIM(date_arvs_initiation) = '')
+    AND is_on_arvs = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-05 14:47:49'
+),
+
+future_date_arvs_initiation AS (
+  -- Future date_arvs_initiation (only when is_on_arvs = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_arvs_initiation' AS variable,
+    'Future date_arvs_initiation' AS issue,
+    date_arvs_initiation AS current_value
+  FROM maternal_core
+  WHERE date_arvs_initiation IS NOT NULL
+    AND TRIM(date_arvs_initiation) != ''
+    AND is_on_arvs = '1'
+    AND TRY_CAST(date_arvs_initiation AS DATE) > CURRENT_DATE
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-05 14:47:49'
+),
+
+
+missing_is_vdrl_positive_treatment AS (
+  -- Missing is_vdrl_positive_treatment (only when vdrl_test_result = '1' i.e., VDRL positive)
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_vdrl_positive_treatment' AS variable,
+    'Missing is_vdrl_positive_treatment (VDRL positive but treatment status not recorded)' AS issue,
+    is_vdrl_positive_treatment AS current_value
+  FROM maternal_core
+  WHERE (is_vdrl_positive_treatment IS NULL OR TRIM(is_vdrl_positive_treatment) = '')
+    AND vdrl_test_result = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-06-03 13:00:24'
+),
+
+
+missing_is_bp_intervention AS (
+  -- Missing is_bp_intervention
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_bp_intervention' AS variable,
+    'Missing is_bp_intervention' AS issue,
+    is_bp_intervention AS current_value
+  FROM maternal_core
+  WHERE (is_bp_intervention IS NULL OR TRIM(is_bp_intervention) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_rbs_intervention AS (
+  -- Missing is_rbs_intervention
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_rbs_intervention' AS variable,
+    'Missing is_rbs_intervention' AS issue,
+    is_rbs_intervention AS current_value
+  FROM maternal_core
+  WHERE (is_rbs_intervention IS NULL OR TRIM(is_rbs_intervention) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_hb_intervention AS (
+  -- Missing is_hb_intervention
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_hb_intervention' AS variable,
+    'Missing is_hb_intervention' AS issue,
+    is_hb_intervention AS current_value
+  FROM maternal_core
+  WHERE (is_hb_intervention IS NULL OR TRIM(is_hb_intervention) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_iron_supplements AS (
+  -- Missing is_iron_supplements
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_iron_supplements' AS variable,
+    'Missing is_iron_supplements' AS issue,
+    is_iron_supplements AS current_value
+  FROM maternal_core
+  WHERE (is_iron_supplements IS NULL OR TRIM(is_iron_supplements) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_blood_transfusion AS (
+  -- Missing is_blood_transfusion
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_blood_transfusion' AS variable,
+    'Missing is_blood_transfusion' AS issue,
+    is_blood_transfusion AS current_value
+  FROM maternal_core
+  WHERE (is_blood_transfusion IS NULL OR TRIM(is_blood_transfusion) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_abnormal_us_intervened AS (
+  -- Missing is_abnormal_us_intervened
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_abnormal_us_intervened' AS variable,
+    'Missing is_abnormal_us_intervened' AS issue,
+    is_abnormal_us_intervened AS current_value
+  FROM maternal_core
+  WHERE (is_abnormal_us_intervened IS NULL OR TRIM(is_abnormal_us_intervened) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_antibiotics_last_4_wks AS (
+  -- Missing is_antibiotics_last_4_wks
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_antibiotics_last_4_wks' AS variable,
+    'Missing is_antibiotics_last_4_wks' AS issue,
+    is_antibiotics_last_4_wks AS current_value
+  FROM maternal_core
+  WHERE (is_antibiotics_last_4_wks IS NULL OR TRIM(is_antibiotics_last_4_wks) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_deworming_in_pregnancy AS (
+  -- Missing is_deworming_in_pregnancy
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_deworming_in_pregnancy' AS variable,
+    'Missing is_deworming_in_pregnancy' AS issue,
+    is_deworming_in_pregnancy AS current_value
+  FROM maternal_core
+  WHERE (is_deworming_in_pregnancy IS NULL OR TRIM(is_deworming_in_pregnancy) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_iron_given AS (
+  -- Missing is_iron_given
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_iron_given' AS variable,
+    'Missing is_iron_given' AS issue,
+    is_iron_given AS current_value
+  FROM maternal_core
+  WHERE (is_iron_given IS NULL OR TRIM(is_iron_given) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_folic_acid_given AS (
+  -- Missing is_folic_acid_given
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_folic_acid_given' AS variable,
+    'Missing is_folic_acid_given' AS issue,
+    is_folic_acid_given AS current_value
+  FROM maternal_core
+  WHERE (is_folic_acid_given IS NULL OR TRIM(is_folic_acid_given) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_calcium_given AS (
+  -- Missing is_calcium_given
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_calcium_given' AS variable,
+    'Missing is_calcium_given' AS issue,
+    is_calcium_given AS current_value
+  FROM maternal_core
+  WHERE (is_calcium_given IS NULL OR TRIM(is_calcium_given) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_multivitamins_given AS (
+  -- Missing is_multivitamins_given
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_multivitamins_given' AS variable,
+    'Missing is_multivitamins_given' AS issue,
+    is_multivitamins_given AS current_value
+  FROM maternal_core
+  WHERE (is_multivitamins_given IS NULL OR TRIM(is_multivitamins_given) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_other_supplements AS (
+  -- Missing is_other_supplements
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_other_supplements' AS variable,
+    'Missing is_other_supplements' AS issue,
+    is_other_supplements AS current_value
+  FROM maternal_core
+  WHERE (is_other_supplements IS NULL OR TRIM(is_other_supplements) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_supplements_given_other AS (
+  -- Missing supplements_given_other when is_other_supplements = '1'
+  SELECT
+    record_id,
+    datetime_entry,
+    'supplements_given_other' AS variable,
+    'Missing supplements_given_other (other supplements = Yes but no specification)' AS issue,
+    supplements_given_other AS current_value
+  FROM maternal_core
+  WHERE (supplements_given_other IS NULL OR TRIM(supplements_given_other) = '')
+    AND is_other_supplements = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_alcohol_present AS (
+  -- Missing is_alcohol_present
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_alcohol_present' AS variable,
+    'Missing is_alcohol_present' AS issue,
+    is_alcohol_present AS current_value
+  FROM maternal_core
+  WHERE (is_alcohol_present IS NULL OR TRIM(is_alcohol_present) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_cigarette_present AS (
+  -- Missing is_cigarette_present
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_cigarette_present' AS variable,
+    'Missing is_cigarette_present' AS issue,
+    is_cigarette_present AS current_value
+  FROM maternal_core
+  WHERE (is_cigarette_present IS NULL OR TRIM(is_cigarette_present) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_chewing_tobacco AS (
+  -- Missing is_chewing_tobacco
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_chewing_tobacco' AS variable,
+    'Missing is_chewing_tobacco' AS issue,
+    is_chewing_tobacco AS current_value
+  FROM maternal_core
+  WHERE (is_chewing_tobacco IS NULL OR TRIM(is_chewing_tobacco) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_oth_substances AS (
+  -- Missing is_oth_substances
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_oth_substances' AS variable,
+    'Missing is_oth_substances' AS issue,
+    is_oth_substances AS current_value
+  FROM maternal_core
+  WHERE (is_oth_substances IS NULL OR TRIM(is_oth_substances) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_substances_in_preg_other AS (
+  -- Missing substances_in_preg_other when is_oth_substances = '1'
+  SELECT
+    record_id,
+    datetime_entry,
+    'substances_in_preg_other' AS variable,
+    'Missing substances_in_preg_other (other substances = Yes but no specification)' AS issue,
+    substances_in_preg_other AS current_value
+  FROM maternal_core
+  WHERE (substances_in_preg_other IS NULL OR TRIM(substances_in_preg_other) = '')
+    AND is_oth_substances = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_other_meds_not_ind AS (
+  -- Missing is_other_meds_not_ind
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_other_meds_not_ind' AS variable,
+    'Missing is_other_meds_not_ind' AS issue,
+    is_other_meds_not_ind AS current_value
+  FROM maternal_core
+  WHERE (is_other_meds_not_ind IS NULL OR TRIM(is_other_meds_not_ind) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_other_meds_not_ind AS (
+  -- Missing other_meds_not_ind when is_other_meds_not_ind = '1'
+  SELECT
+    record_id,
+    datetime_entry,
+    'other_meds_not_ind' AS variable,
+    'Missing other_meds_not_ind (other medications not indicated = Yes but no specification)' AS issue,
+    other_meds_not_ind AS current_value
+  FROM maternal_core
+  WHERE (other_meds_not_ind IS NULL OR TRIM(other_meds_not_ind) = '')
+    AND is_other_meds_not_ind = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_other_interventions AS (
+  -- Missing other_interventions
+  SELECT
+    record_id,
+    datetime_entry,
+    'other_interventions' AS variable,
+    'Missing other_interventions' AS issue,
+    other_interventions AS current_value
+  FROM maternal_core
+  WHERE (other_interventions IS NULL OR TRIM(other_interventions) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
 
 
 
@@ -3034,6 +3417,60 @@ future_date_ogtt_test_done AS (
     SELECT * FROM missing_date_ogtt_test_done
     UNION ALL
     SELECT * FROM future_date_ogtt_test_done
+    UNION ALL
+    SELECT * FROM missing_is_on_arvs
+    UNION ALL
+    SELECT * FROM missing_arvs_used
+    UNION ALL
+    SELECT * FROM missing_date_arvs_initiation
+    UNION ALL
+    SELECT * FROM future_date_arvs_initiation
+    UNION ALL
+    SELECT * FROM missing_is_vdrl_positive_treatment
+    UNION ALL
+    SELECT * FROM missing_is_bp_intervention
+    UNION ALL
+    SELECT * FROM missing_is_rbs_intervention
+    UNION ALL
+    SELECT * FROM missing_is_hb_intervention
+    UNION ALL
+    SELECT * FROM missing_is_iron_supplements
+    UNION ALL
+    SELECT * FROM missing_is_blood_transfusion
+    UNION ALL
+    SELECT * FROM missing_is_abnormal_us_intervened
+    UNION ALL
+    SELECT * FROM missing_is_antibiotics_last_4_wks
+    UNION ALL
+    SELECT * FROM missing_is_deworming_in_pregnancy
+    UNION ALL
+    SELECT * FROM missing_is_iron_given
+    UNION ALL
+    SELECT * FROM missing_is_folic_acid_given
+    UNION ALL
+    SELECT * FROM missing_is_calcium_given
+    UNION ALL
+    SELECT * FROM missing_is_multivitamins_given
+    UNION ALL
+    SELECT * FROM missing_is_other_supplements
+    UNION ALL
+    SELECT * FROM missing_supplements_given_other
+    UNION ALL
+    SELECT * FROM missing_is_alcohol_present
+    UNION ALL
+    SELECT * FROM missing_is_cigarette_present
+    UNION ALL
+    SELECT * FROM missing_is_chewing_tobacco
+    UNION ALL
+    SELECT * FROM missing_is_oth_substances
+    UNION ALL
+    SELECT * FROM missing_substances_in_preg_other
+    UNION ALL
+    SELECT * FROM missing_is_other_meds_not_ind
+    UNION ALL
+    SELECT * FROM missing_other_meds_not_ind
+    UNION ALL
+    SELECT * FROM missing_other_interventions
 
 
 
