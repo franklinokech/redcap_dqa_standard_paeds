@@ -3049,6 +3049,155 @@ missing_other_interventions AS (
 ),
 
 
+missing_count_pregs AS (
+  -- Missing count_pregs
+  SELECT
+    record_id,
+    datetime_entry,
+    'count_pregs' AS variable,
+    'Missing count_pregs' AS issue,
+    count_pregs AS current_value
+  FROM maternal_core
+  WHERE (count_pregs IS NULL OR TRIM(count_pregs) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_count_pregs AS (
+  -- count_pregs out of range (expected 1-25 pregnancies)
+  SELECT
+    record_id,
+    datetime_entry,
+    'count_pregs' AS variable,
+    'count_pregs out of range (expected 1-25 pregnancies)' AS issue,
+    count_pregs AS current_value
+  FROM maternal_core
+  WHERE count_pregs IS NOT NULL
+    AND TRIM(count_pregs) != ''
+    AND TRIM(count_pregs) != 'NI'
+    AND (
+      TRY_CAST(count_pregs AS INTEGER) IS NULL
+      OR TRY_CAST(count_pregs AS INTEGER) < 1
+      OR TRY_CAST(count_pregs AS INTEGER) > 25
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_pregs_28w_alive AS (
+  -- Missing pregs_28w_alive
+  SELECT
+    record_id,
+    datetime_entry,
+    'pregs_28w_alive' AS variable,
+    'Missing pregs_28w_alive' AS issue,
+    pregs_28w_alive AS current_value
+  FROM maternal_core
+  WHERE (pregs_28w_alive IS NULL OR TRIM(pregs_28w_alive) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_pregs_28w_alive AS (
+  -- pregs_28w_alive out of range (expected 0-25)
+  SELECT
+    record_id,
+    datetime_entry,
+    'pregs_28w_alive' AS variable,
+    'pregs_28w_alive out of range (expected 0-25)' AS issue,
+    pregs_28w_alive AS current_value
+  FROM maternal_core
+  WHERE pregs_28w_alive IS NOT NULL
+    AND TRIM(pregs_28w_alive) != ''
+    AND TRIM(pregs_28w_alive) != 'NI'
+    AND (
+      TRY_CAST(pregs_28w_alive AS INTEGER) IS NULL
+      OR TRY_CAST(pregs_28w_alive AS INTEGER) < 0
+      OR TRY_CAST(pregs_28w_alive AS INTEGER) > 25
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_pregs_28w_miscarriage AS (
+  -- Missing pregs_28w_miscarriage
+  SELECT
+    record_id,
+    datetime_entry,
+    'pregs_28w_miscarriage' AS variable,
+    'Missing pregs_28w_miscarriage' AS issue,
+    pregs_28w_miscarriage AS current_value
+  FROM maternal_core
+  WHERE (pregs_28w_miscarriage IS NULL OR TRIM(pregs_28w_miscarriage) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_pregs_28w_miscarriage AS (
+  -- pregs_28w_miscarriage out of range (expected 0-25)
+  SELECT
+    record_id,
+    datetime_entry,
+    'pregs_28w_miscarriage' AS variable,
+    'pregs_28w_miscarriage out of range (expected 0-25)' AS issue,
+    pregs_28w_miscarriage AS current_value
+  FROM maternal_core
+  WHERE pregs_28w_miscarriage IS NOT NULL
+    AND TRIM(pregs_28w_miscarriage) != ''
+    AND TRIM(pregs_28w_miscarriage) != 'NI'
+    AND (
+      TRY_CAST(pregs_28w_miscarriage AS INTEGER) IS NULL
+      OR TRY_CAST(pregs_28w_miscarriage AS INTEGER) < 0
+      OR TRY_CAST(pregs_28w_miscarriage AS INTEGER) > 25
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_count_living_children AS (
+  -- Missing count_living_children
+  SELECT
+    record_id,
+    datetime_entry,
+    'count_living_children' AS variable,
+    'Missing count_living_children' AS issue,
+    count_living_children AS current_value
+  FROM maternal_core
+  WHERE (count_living_children IS NULL OR TRIM(count_living_children) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_count_living_children AS (
+  -- count_living_children out of range (expected 0-25)
+  SELECT
+    record_id,
+    datetime_entry,
+    'count_living_children' AS variable,
+    'count_living_children out of range (expected 0-25)' AS issue,
+    count_living_children AS current_value
+  FROM maternal_core
+  WHERE count_living_children IS NOT NULL
+    AND TRIM(count_living_children) != ''
+    AND TRIM(count_living_children) != 'NI'
+    AND (
+      TRY_CAST(count_living_children AS INTEGER) IS NULL
+      OR TRY_CAST(count_living_children AS INTEGER) < 0
+      OR TRY_CAST(count_living_children AS INTEGER) > 25
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_prev_preg_filled AS (
+  -- Missing is_prev_preg_filled
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_prev_preg_filled' AS variable,
+    'Missing is_prev_preg_filled' AS issue,
+    is_prev_preg_filled AS current_value
+  FROM maternal_core
+  WHERE (is_prev_preg_filled IS NULL OR TRIM(is_prev_preg_filled) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-20 10:53:16'
+),
+
+
 
 
 
@@ -3471,6 +3620,24 @@ missing_other_interventions AS (
     SELECT * FROM missing_other_meds_not_ind
     UNION ALL
     SELECT * FROM missing_other_interventions
+    UNION ALL
+    SELECT * FROM missing_count_pregs
+    UNION ALL
+    SELECT * FROM invalid_count_pregs
+    UNION ALL
+    SELECT * FROM missing_pregs_28w_alive
+    UNION ALL
+    SELECT * FROM invalid_pregs_28w_alive
+    UNION ALL
+    SELECT * FROM missing_pregs_28w_miscarriage
+    UNION ALL
+    SELECT * FROM invalid_pregs_28w_miscarriage
+    UNION ALL
+    SELECT * FROM missing_count_living_children
+    UNION ALL
+    SELECT * FROM invalid_count_living_children
+    UNION ALL
+    SELECT * FROM missing_is_prev_preg_filled
 
 
 
