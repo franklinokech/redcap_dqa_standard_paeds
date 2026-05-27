@@ -1,0 +1,2389 @@
+con <- DBI::dbConnect(
+  duckdb::duckdb(),
+  dbdir = here::here("cin_maternal", "data", "processed", "maternal.duckdb")
+)
+
+start_date <- "2025-09-08"
+end_date   <- "2026-05-27"
+
+df_issues <- DBI::dbGetQuery(con, glue::glue("
+  WITH
+
+    -- document_source checks
+    missing_document_source AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'document_source' AS variable,
+        'Missing document_source' AS issue,
+        document_source AS current_value
+      FROM maternal_core
+      WHERE (document_source IS NULL OR TRIM(document_source) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-08 10:47:19'
+    ),
+
+    -- hosp_id checks
+    missing_hosp_id AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'hosp_id' AS variable,
+        'Missing hosp_id' AS issue,
+        hosp_id AS current_value
+      FROM maternal_core
+      WHERE (hosp_id IS NULL OR TRIM(hosp_id) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- admission_type checks
+    missing_admission_type AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'admission_type' AS variable,
+        'Missing admission_type' AS issue,
+        admission_type AS current_value
+      FROM maternal_core
+      WHERE (admission_type IS NULL OR TRIM(admission_type) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- mother_ip_no checks
+    missing_mother_ip_no AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'mother_ip_no' AS variable,
+        'Missing mother_ip_no' AS issue,
+        mother_ip_no AS current_value
+      FROM maternal_core
+      WHERE (mother_ip_no IS NULL OR TRIM(mother_ip_no) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- mother_age checks
+    missing_mother_age AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'mother_age' AS variable,
+        'Missing mother_age' AS issue,
+        mother_age AS current_value
+      FROM maternal_core
+      WHERE (mother_age IS NULL OR TRIM(mother_age) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    invalid_mother_age AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'mother_age' AS variable,
+        'mother_age out of range (10-60)' AS issue,
+        mother_age AS current_value
+      FROM maternal_core
+      WHERE mother_age IS NOT NULL
+        AND TRIM(mother_age) != ''
+        AND (TRY_CAST(mother_age AS INTEGER) < 10 OR TRY_CAST(mother_age AS INTEGER) > 60)
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- mother_county checks
+    missing_mother_county AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'mother_county' AS variable,
+        'Missing mother_county' AS issue,
+        mother_county AS current_value
+      FROM maternal_core
+      WHERE (mother_county IS NULL OR TRIM(mother_county) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- mother_subcounty checks
+    missing_mother_subcounty AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'mother_subcounty' AS variable,
+        'Missing mother_subcounty' AS issue,
+        mother_subcounty AS current_value
+      FROM maternal_core
+      WHERE (mother_subcounty IS NULL OR TRIM(mother_subcounty) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- admission_date checks
+    missing_admission_date AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'admission_date' AS variable,
+        'Missing admission_date' AS issue,
+        admission_date AS current_value
+      FROM maternal_core
+      WHERE (admission_date IS NULL OR TRIM(admission_date) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    future_admission_date AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'admission_date' AS variable,
+        'Future admission_date' AS issue,
+        admission_date AS current_value
+      FROM maternal_core
+      WHERE admission_date IS NOT NULL
+        AND TRIM(admission_date) != ''
+        AND TRY_CAST(admission_date AS DATE) > CURRENT_DATE
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- admission_time checks
+    missing_admission_time AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'admission_time' AS variable,
+        'Missing admission_time' AS issue,
+        admission_time AS current_value
+      FROM maternal_core
+      WHERE (admission_time IS NULL OR TRIM(admission_time) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- admission_time_unit checks
+    missing_admission_time_unit AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'admission_time_unit' AS variable,
+        'Missing admission_time_unit' AS issue,
+        admission_time_unit AS current_value
+      FROM maternal_core
+      WHERE (admission_time_unit IS NULL OR TRIM(admission_time_unit) = '')
+        AND admission_time IS NOT NULL
+        AND TRIM(admission_time) != ''
+        AND TRIM(admission_time) != 'NI'
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- mother_residence checks
+    missing_mother_residence AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'mother_residence' AS variable,
+        'Missing mother_residence' AS issue,
+        mother_residence AS current_value
+      FROM maternal_core
+      WHERE (mother_residence IS NULL OR TRIM(mother_residence) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- marriage_status checks
+    missing_marriage_status AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'marriage_status' AS variable,
+        'Missing marriage_status' AS issue,
+        marriage_status AS current_value
+      FROM maternal_core
+      WHERE (marriage_status IS NULL OR TRIM(marriage_status) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- education_level checks
+    missing_education_level AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'education_level' AS variable,
+        'Missing education_level' AS issue,
+        education_level AS current_value
+      FROM maternal_core
+      WHERE (education_level IS NULL OR TRIM(education_level) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- nationality checks
+    -- missing_nationality AS (
+    --   SELECT
+    --     record_id,
+    --     datetime_entry,
+    --     'nationality' AS variable,
+    --     'Missing nationality' AS issue,
+    --     nationality AS current_value
+    --   FROM maternal_core
+    --   WHERE (nationality IS NULL OR TRIM(nationality) = '')
+    --     AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    -- ),
+
+    -- mother_occupation checks
+    missing_mother_occupation AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'mother_occupation' AS variable,
+        'Missing mother_occupation' AS issue,
+        mother_occupation AS current_value
+      FROM maternal_core
+      WHERE (mother_occupation IS NULL OR TRIM(mother_occupation) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    missing_mother_occupation_other AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'mother_occupation_other' AS variable,
+        'Missing mother_occupation_other' AS issue,
+        mother_occupation_other AS current_value
+      FROM maternal_core
+      WHERE (mother_occupation_other IS NULL OR TRIM(mother_occupation_other) = '')
+        AND mother_occupation IS NOT NULL
+        AND TRIM(mother_occupation) = 'OTH'
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2026-04-10 18:15:23'
+    ),
+
+    -- payment_method checks
+    missing_payment_method AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'payment_method' AS variable,
+        'Missing payment_method' AS issue,
+        payment_method AS current_value
+      FROM maternal_core
+      WHERE (payment_method IS NULL OR TRIM(payment_method) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    missing_payment_other AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'payment_other' AS variable,
+        'Missing payment_other' AS issue,
+        payment_other AS current_value
+      FROM maternal_core
+      WHERE (payment_other IS NULL OR TRIM(payment_other) = '')
+        AND payment_method IS NOT NULL
+        AND TRIM(payment_method) = 'OTH'
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-05 14:47:49'
+    ),
+
+    -- is_referral checks
+    missing_is_referral AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'is_referral' AS variable,
+        'Missing is_referral' AS issue,
+        is_referral AS current_value
+      FROM maternal_core
+      WHERE (is_referral IS NULL OR TRIM(is_referral) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- referral checks
+    missing_referral_type AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'referral_type' AS variable,
+        'Missing referral_type' AS issue,
+        referral_type AS current_value
+      FROM maternal_core
+      WHERE (referral_type IS NULL OR TRIM(referral_type) = '')
+        AND is_referral IS NOT NULL
+        AND TRIM(is_referral) = '1'
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-06 12:24:54'
+    ),
+
+    missing_referring_facility_level AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'referring_facility_level' AS variable,
+        'Missing referring_facility_level' AS issue,
+        referring_facility_level AS current_value
+      FROM maternal_core
+      WHERE (referring_facility_level IS NULL OR TRIM(referring_facility_level) = '')
+        AND is_referral IS NOT NULL
+        AND TRIM(is_referral) = '1'
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-06 12:24:54'
+    ),
+
+    missing_referring_facility_name AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'referring_facility_name' AS variable,
+        'Missing referring_facility_name' AS issue,
+        referring_facility_name AS current_value
+      FROM maternal_core
+      WHERE (referring_facility_name IS NULL OR TRIM(referring_facility_name) = '')
+        AND is_referral IS NOT NULL
+        AND TRIM(is_referral) = '1'
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-06 12:24:54'
+    ),
+
+    missing_referring_facility_other AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'referring_facility_other' AS variable,
+        'Missing referring_facility_other' AS issue,
+        referring_facility_other AS current_value
+      FROM maternal_core
+      WHERE (referring_facility_other IS NULL OR TRIM(referring_facility_other) = '')
+        AND referring_facility_name IS NOT NULL
+        AND TRIM(referring_facility_name) = 'OTH'
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-12 10:05:50'
+    ),
+
+    -- is_consented checks
+    missing_is_consented AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'is_consented' AS variable,
+        'Missing is_consented' AS issue,
+        is_consented AS current_value
+      FROM maternal_core
+      WHERE (is_consented IS NULL OR TRIM(is_consented) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 00:00:00'
+    ),
+
+    -- study_id checks
+    missing_study_id AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'study_id' AS variable,
+        'Missing study_id' AS issue,
+        study_id AS current_value
+      FROM maternal_core
+      WHERE (study_id IS NULL OR TRIM(study_id) = '')
+        AND is_consented = '1'
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-10 09:44:07'
+    ),
+
+    invalid_study_id AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'study_id' AS variable,
+        'study_id does not match expected format' AS issue,
+        study_id AS current_value
+      FROM maternal_core
+      WHERE study_id IS NOT NULL
+        AND TRIM(study_id) != ''
+        AND is_consented = '1'
+        AND NOT (
+          regexp_matches(study_id, '^(LC|CG)-72-[0-9]+-[0-9]+$')
+          OR
+          regexp_matches(study_id, '^(LC|CG)-72[0-9]{{5,}}$')
+        )
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-10 09:44:07'
+    ),
+
+    -- registering_clerk checks
+    missing_registering_clerk AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'registering_clerk' AS variable,
+        'Missing registering_clerk' AS issue,
+        registering_clerk AS current_value
+      FROM maternal_core
+      WHERE (registering_clerk IS NULL OR TRIM(registering_clerk) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- date_clerking checks
+    missing_date_clerking AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'date_clerking' AS variable,
+        'Missing date_clerking' AS issue,
+        date_clerking AS current_value
+      FROM maternal_core
+      WHERE (date_clerking IS NULL OR TRIM(date_clerking) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    future_date_clerking AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'date_clerking' AS variable,
+        'Future date_clerking' AS issue,
+        date_clerking AS current_value
+      FROM maternal_core
+      WHERE date_clerking IS NOT NULL
+        AND TRIM(date_clerking) != ''
+        AND TRY_CAST(date_clerking AS DATE) > CURRENT_DATE
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    early_date_clerking AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'date_clerking' AS variable,
+        'date_clerking is before admission_date' AS issue,
+        date_clerking AS current_value
+      FROM maternal_core
+      WHERE date_clerking IS NOT NULL
+        AND TRIM(date_clerking) != ''
+        AND admission_date IS NOT NULL
+        AND TRIM(admission_date) != ''
+        AND TRY_CAST(date_clerking AS DATE) < TRY_CAST(admission_date AS DATE)
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    -- time_clerking checks
+    missing_time_clerking AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'time_clerking' AS variable,
+        'Missing time_clerking' AS issue,
+        time_clerking AS current_value
+      FROM maternal_core
+      WHERE (time_clerking IS NULL OR TRIM(time_clerking) = '')
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+    invalid_time_clerking AS (
+      SELECT
+        record_id,
+        datetime_entry,
+        'time_clerking' AS variable,
+        'Invalid time_clerking format (expected HH:MM 12hr or 24hr)' AS issue,
+        time_clerking AS current_value
+      FROM maternal_core
+      WHERE time_clerking IS NOT NULL
+        AND TRIM(time_clerking) != ''
+        AND TRIM(time_clerking) != 'NI'
+        AND NOT (
+          regexp_matches(TRIM(time_clerking), '^(0?[1-9]|1[0-2]):[0-5][0-9]$')
+          OR
+          regexp_matches(TRIM(time_clerking), '^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+        )
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+  missing_clerking_time_unit AS (
+      -- Missing clerking_time_unit when time_clerking is present and not NI
+      SELECT
+        record_id,
+        datetime_entry,
+        'clerking_time_unit' AS variable,
+        'Missing clerking_time_unit' AS issue,
+        clerking_time_unit AS current_value
+      FROM maternal_core
+      WHERE (clerking_time_unit IS NULL OR TRIM(clerking_time_unit) = '')
+        AND time_clerking IS NOT NULL
+        AND TRIM(time_clerking) != ''
+        AND TRIM(time_clerking) != 'NI'
+        AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    ),
+
+      missing_adm_resp_rate AS (
+    -- Missing adm_resp_rate
+    SELECT
+      record_id,
+      datetime_entry,
+      'adm_resp_rate' AS variable,
+      'Missing adm_resp_rate' AS issue,
+      adm_resp_rate AS current_value
+    FROM maternal_core
+    WHERE (adm_resp_rate IS NULL OR TRIM(adm_resp_rate) = '')
+      AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+  ),
+
+  invalid_adm_resp_rate AS (
+    -- Out of range: expected 8-30 bpm
+    SELECT
+      record_id,
+      datetime_entry,
+      'adm_resp_rate' AS variable,
+      'adm_resp_rate out of range (expected 8-30 bpm)' AS issue,
+      adm_resp_rate AS current_value
+    FROM maternal_core
+    WHERE adm_resp_rate IS NOT NULL
+      AND TRIM(adm_resp_rate) != ''
+      AND TRIM(adm_resp_rate) != 'NI'
+      AND (
+        TRY_CAST(adm_resp_rate AS INTEGER) IS NULL
+        OR TRY_CAST(adm_resp_rate AS INTEGER) < 8
+        OR TRY_CAST(adm_resp_rate AS INTEGER) > 30
+      )
+      AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+  ),
+
+  missing_adm_bp_systolic AS (
+  -- Missing adm_bp_systolic
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_bp_systolic' AS variable,
+    'Missing adm_bp_systolic' AS issue,
+    adm_bp_systolic AS current_value
+  FROM maternal_core
+  WHERE (adm_bp_systolic IS NULL OR TRIM(adm_bp_systolic) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_adm_bp_systolic AS (
+  -- Out of range: expected 50-300 mm Hg
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_bp_systolic' AS variable,
+    'adm_bp_systolic out of range (expected 50-300 mm Hg)' AS issue,
+    adm_bp_systolic AS current_value
+  FROM maternal_core
+  WHERE adm_bp_systolic IS NOT NULL
+    AND TRIM(adm_bp_systolic) != ''
+    AND TRIM(adm_bp_systolic) != 'NI'
+    AND (
+      TRY_CAST(adm_bp_systolic AS INTEGER) IS NULL
+      OR TRY_CAST(adm_bp_systolic AS INTEGER) < 50
+      OR TRY_CAST(adm_bp_systolic AS INTEGER) > 300
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_adm_bp_diastolic AS (
+  -- Missing adm_bp_diastolic
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_bp_diastolic' AS variable,
+    'Missing adm_bp_diastolic' AS issue,
+    adm_bp_diastolic AS current_value
+  FROM maternal_core
+  WHERE (adm_bp_diastolic IS NULL OR TRIM(adm_bp_diastolic) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_adm_bp_diastolic AS (
+  -- Out of range: expected 30-200 mm Hg (extended to capture extremes)
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_bp_diastolic' AS variable,
+    'adm_bp_diastolic out of range (expected 30-200 mm Hg)' AS issue,
+    adm_bp_diastolic AS current_value
+  FROM maternal_core
+  WHERE adm_bp_diastolic IS NOT NULL
+    AND TRIM(adm_bp_diastolic) != ''
+    AND TRIM(adm_bp_diastolic) != 'NI'
+    AND (
+      TRY_CAST(adm_bp_diastolic AS INTEGER) IS NULL
+      OR TRY_CAST(adm_bp_diastolic AS INTEGER) < 30
+      OR TRY_CAST(adm_bp_diastolic AS INTEGER) > 200
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_adm_heart_rate AS (
+  -- Missing adm_heart_rate
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_heart_rate' AS variable,
+    'Missing adm_heart_rate' AS issue,
+    adm_heart_rate AS current_value
+  FROM maternal_core
+  WHERE (adm_heart_rate IS NULL OR TRIM(adm_heart_rate) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_adm_heart_rate AS (
+  -- Out of range: expected 20-200 /min (extended to capture extremes)
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_heart_rate' AS variable,
+    'adm_heart_rate out of range (expected 20-200 /min)' AS issue,
+    adm_heart_rate AS current_value
+  FROM maternal_core
+  WHERE adm_heart_rate IS NOT NULL
+    AND TRIM(adm_heart_rate) != ''
+    AND TRIM(adm_heart_rate) != 'NI'
+    AND (
+      TRY_CAST(adm_heart_rate AS INTEGER) IS NULL
+      OR TRY_CAST(adm_heart_rate AS INTEGER) < 20
+      OR TRY_CAST(adm_heart_rate AS INTEGER) > 200
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_adm_spo2 AS (
+  -- Missing adm_spo2
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_spo2' AS variable,
+    'Missing adm_spo2' AS issue,
+    adm_spo2 AS current_value
+  FROM maternal_core
+  WHERE (adm_spo2 IS NULL OR TRIM(adm_spo2) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_adm_spo2 AS (
+  -- Out of range: expected 50-100 % (extended to capture extremes)
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_spo2' AS variable,
+    'adm_spo2 out of range (expected 50-100 %)' AS issue,
+    adm_spo2 AS current_value
+  FROM maternal_core
+  WHERE adm_spo2 IS NOT NULL
+    AND TRIM(adm_spo2) != ''
+    AND TRIM(adm_spo2) != 'NI'
+    AND (
+      TRY_CAST(adm_spo2 AS INTEGER) IS NULL
+      OR TRY_CAST(adm_spo2 AS INTEGER) < 50
+      OR TRY_CAST(adm_spo2 AS INTEGER) > 100
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_adm_temp AS (
+  -- Missing adm_temp
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_temp' AS variable,
+    'Missing adm_temp' AS issue,
+    adm_temp AS current_value
+  FROM maternal_core
+  WHERE (adm_temp IS NULL OR TRIM(adm_temp) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_adm_temp AS (
+  -- Out of range: expected 30-45 °C (extended to capture extremes)
+  SELECT
+    record_id,
+    datetime_entry,
+    'adm_temp' AS variable,
+    'adm_temp out of range (expected 30-45 °C)' AS issue,
+    adm_temp AS current_value
+  FROM maternal_core
+  WHERE adm_temp IS NOT NULL
+    AND TRIM(adm_temp) != ''
+    AND TRIM(adm_temp) != 'NI'
+    AND (
+      TRY_CAST(adm_temp AS DOUBLE) IS NULL
+      OR TRY_CAST(adm_temp AS DOUBLE) < 30
+      OR TRY_CAST(adm_temp AS DOUBLE) > 45
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_airway_not_patent AS (
+  -- Missing is_airway_not_patent
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_airway_not_patent' AS variable,
+    'Missing is_airway_not_patent' AS issue,
+    is_airway_not_patent AS current_value
+  FROM maternal_core
+  WHERE (is_airway_not_patent IS NULL OR TRIM(is_airway_not_patent) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_abnormal_resp_rate AS (
+  -- Missing is_abnormal_resp_rate
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_abnormal_resp_rate' AS variable,
+    'Missing is_abnormal_resp_rate' AS issue,
+    is_abnormal_resp_rate AS current_value
+  FROM maternal_core
+  WHERE (is_abnormal_resp_rate IS NULL OR TRIM(is_abnormal_resp_rate) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_vaginal_bleeding AS (
+  -- Missing is_vaginal_bleeding
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_vaginal_bleeding' AS variable,
+    'Missing is_vaginal_bleeding' AS issue,
+    is_vaginal_bleeding AS current_value
+  FROM maternal_core
+  WHERE (is_vaginal_bleeding IS NULL OR TRIM(is_vaginal_bleeding) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_abnormal_temp AS (
+  -- Missing is_abnormal_temp
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_abnormal_temp' AS variable,
+    'Missing is_abnormal_temp' AS issue,
+    is_abnormal_temp AS current_value
+  FROM maternal_core
+  WHERE (is_abnormal_temp IS NULL OR TRIM(is_abnormal_temp) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_unconscious AS (
+  -- Missing is_unconscious
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_unconscious' AS variable,
+    'Missing is_unconscious' AS issue,
+    is_unconscious AS current_value
+  FROM maternal_core
+  WHERE (is_unconscious IS NULL OR TRIM(is_unconscious) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_convulsing AS (
+  -- Missing is_convulsing
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_convulsing' AS variable,
+    'Missing is_convulsing' AS issue,
+    is_convulsing AS current_value
+  FROM maternal_core
+  WHERE (is_convulsing IS NULL OR TRIM(is_convulsing) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_epigastric_pain AS (
+  -- Missing is_epigastric_pain
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_epigastric_pain' AS variable,
+    'Missing is_epigastric_pain' AS issue,
+    is_epigastric_pain AS current_value
+  FROM maternal_core
+  WHERE (is_epigastric_pain IS NULL OR TRIM(is_epigastric_pain) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_abnormal_heart_rate AS (
+  -- Missing is_abnormal_heart_rate
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_abnormal_heart_rate' AS variable,
+    'Missing is_abnormal_heart_rate' AS issue,
+    is_abnormal_heart_rate AS current_value
+  FROM maternal_core
+  WHERE (is_abnormal_heart_rate IS NULL OR TRIM(is_abnormal_heart_rate) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_abnormal_f_heart_rate AS (
+  -- Missing is_abnormal_f_heart_rate
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_abnormal_f_heart_rate' AS variable,
+    'Missing is_abnormal_f_heart_rate' AS issue,
+    is_abnormal_f_heart_rate AS current_value
+  FROM maternal_core
+  WHERE (is_abnormal_f_heart_rate IS NULL OR TRIM(is_abnormal_f_heart_rate) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_headache AS (
+  -- Missing is_headache
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_headache' AS variable,
+    'Missing is_headache' AS issue,
+    is_headache AS current_value
+  FROM maternal_core
+  WHERE (is_headache IS NULL OR TRIM(is_headache) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_abnormal_systolic_bp AS (
+  -- Missing is_abnormal_systolic_bp
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_abnormal_systolic_bp' AS variable,
+    'Missing is_abnormal_systolic_bp' AS issue,
+    is_abnormal_systolic_bp AS current_value
+  FROM maternal_core
+  WHERE (is_abnormal_systolic_bp IS NULL OR TRIM(is_abnormal_systolic_bp) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_dysponea AS (
+  -- Missing is_dysponea
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_dysponea' AS variable,
+    'Missing is_dysponea' AS issue,
+    is_dysponea AS current_value
+  FROM maternal_core
+  WHERE (is_dysponea IS NULL OR TRIM(is_dysponea) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_rom_gt_18h AS (
+  -- Missing is_rom_gt_18h
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_rom_gt_18h' AS variable,
+    'Missing is_rom_gt_18h' AS issue,
+    is_rom_gt_18h AS current_value
+  FROM maternal_core
+  WHERE (is_rom_gt_18h IS NULL OR TRIM(is_rom_gt_18h) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_abnormal_diastolic_bp AS (
+  -- Missing is_abnormal_diastolic_bp
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_abnormal_diastolic_bp' AS variable,
+    'Missing is_abnormal_diastolic_bp' AS issue,
+    is_abnormal_diastolic_bp AS current_value
+  FROM maternal_core
+  WHERE (is_abnormal_diastolic_bp IS NULL OR TRIM(is_abnormal_diastolic_bp) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_visual_impairment AS (
+  -- Missing is_visual_impairment
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_visual_impairment' AS variable,
+    'Missing is_visual_impairment' AS issue,
+    is_visual_impairment AS current_value
+  FROM maternal_core
+  WHERE (is_visual_impairment IS NULL OR TRIM(is_visual_impairment) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_body_swelling AS (
+  -- Missing is_body_swelling
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_body_swelling' AS variable,
+    'Missing is_body_swelling' AS issue,
+    is_body_swelling AS current_value
+  FROM maternal_core
+  WHERE (is_body_swelling IS NULL OR TRIM(is_body_swelling) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_rom_early AS (
+  -- Missing is_rom_early
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_rom_early' AS variable,
+    'Missing is_rom_early' AS issue,
+    is_rom_early AS current_value
+  FROM maternal_core
+  WHERE (is_rom_early IS NULL OR TRIM(is_rom_early) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_other_obs_emergency AS (
+  -- Missing is_other_obs_emergency
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_other_obs_emergency' AS variable,
+    'Missing is_other_obs_emergency' AS issue,
+    is_other_obs_emergency AS current_value
+  FROM maternal_core
+  WHERE (is_other_obs_emergency IS NULL OR TRIM(is_other_obs_emergency) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_name_triaging_clinician AS (
+  -- Missing name_triaging_clinician
+  SELECT
+    record_id,
+    datetime_entry,
+    'name_triaging_clinician' AS variable,
+    'Missing name_triaging_clinician' AS issue,
+    name_triaging_clinician AS current_value
+  FROM maternal_core
+  WHERE (name_triaging_clinician IS NULL OR TRIM(name_triaging_clinician) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_date_triaging AS (
+  -- Missing date_triaging
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_triaging' AS variable,
+    'Missing date_triaging' AS issue,
+    date_triaging AS current_value
+  FROM maternal_core
+  WHERE (date_triaging IS NULL OR TRIM(date_triaging) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+future_date_triaging AS (
+  -- Future date_triaging
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_triaging' AS variable,
+    'Future date_triaging' AS issue,
+    date_triaging AS current_value
+  FROM maternal_core
+  WHERE date_triaging IS NOT NULL
+    AND TRIM(date_triaging) != ''
+    AND TRY_CAST(date_triaging AS DATE) > CURRENT_DATE
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_time_triaging AS (
+  -- Missing time_triaging
+  SELECT
+    record_id,
+    datetime_entry,
+    'time_triaging' AS variable,
+    'Missing time_triaging' AS issue,
+    time_triaging AS current_value
+  FROM maternal_core
+  WHERE (time_triaging IS NULL OR TRIM(time_triaging) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_time_triaging AS (
+  -- Invalid time_triaging format (expected HH:MM 12hr or 24hr)
+  SELECT
+    record_id,
+    datetime_entry,
+    'time_triaging' AS variable,
+    'Invalid time_triaging format (expected HH:MM 12hr or 24hr)' AS issue,
+    time_triaging AS current_value
+  FROM maternal_core
+  WHERE time_triaging IS NOT NULL
+    AND TRIM(time_triaging) != ''
+    AND TRIM(time_triaging) != 'NI'
+    AND NOT (
+      regexp_matches(TRIM(time_triaging), '^(0?[1-9]|1[0-2]):[0-5][0-9]$')
+      OR
+      regexp_matches(TRIM(time_triaging), '^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_triaging_time_unit AS (
+  -- Missing triaging_time_unit when time_triaging is present and not NI
+  SELECT
+    record_id,
+    datetime_entry,
+    'triaging_time_unit' AS variable,
+    'Missing triaging_time_unit' AS issue,
+    triaging_time_unit AS current_value
+  FROM maternal_core
+  WHERE (triaging_time_unit IS NULL OR TRIM(triaging_time_unit) = '')
+    AND time_triaging IS NOT NULL
+    AND TRIM(time_triaging) != ''
+    AND TRIM(time_triaging) != 'NI'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_date_lmp_complete_status AS (
+  -- Missing date_lmp_complete_status
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_lmp_complete_status' AS variable,
+    'Missing date_lmp_complete_status' AS issue,
+    date_lmp_complete_status AS current_value
+  FROM maternal_core
+  WHERE (date_lmp_complete_status IS NULL OR TRIM(date_lmp_complete_status) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_date_lmp AS (
+  -- Missing date_lmp
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_lmp' AS variable,
+    'Missing date_lmp' AS issue,
+    date_lmp AS current_value
+  FROM maternal_core
+  WHERE (date_lmp IS NULL OR TRIM(date_lmp) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+future_date_lmp AS (
+  -- Future date_lmp
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_lmp' AS variable,
+    'Future date_lmp' AS issue,
+    date_lmp AS current_value
+  FROM maternal_core
+  WHERE date_lmp IS NOT NULL
+    AND TRIM(date_lmp) != ''
+    AND TRY_CAST(date_lmp AS DATE) > CURRENT_DATE
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+date_lmp_after_admission AS (
+  -- date_lmp cannot be after admission_date
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_lmp' AS variable,
+    'date_lmp is after admission_date (LMP should be before admission)' AS issue,
+    date_lmp AS current_value
+  FROM maternal_core
+  WHERE date_lmp IS NOT NULL
+    AND TRIM(date_lmp) != ''
+    AND admission_date IS NOT NULL
+    AND TRIM(admission_date) != ''
+    AND TRY_CAST(date_lmp AS DATE) > TRY_CAST(admission_date AS DATE)
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_date_edd_complete_status AS (
+  -- Missing date_edd_complete_status
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_edd_complete_status' AS variable,
+    'Missing date_edd_complete_status' AS issue,
+    date_edd_complete_status AS current_value
+  FROM maternal_core
+  WHERE (date_edd_complete_status IS NULL OR TRIM(date_edd_complete_status) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_date_edd AS (
+  -- Missing date_edd
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_edd' AS variable,
+    'Missing date_edd' AS issue,
+    date_edd AS current_value
+  FROM maternal_core
+  WHERE (date_edd IS NULL OR TRIM(date_edd) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+-- future_date_edd AS (
+  -- Future date_edd
+  -- SELECT
+   -- record_id,
+   -- datetime_entry,
+    -- 'date_edd' AS variable,
+  --  'Future date_edd' AS issue,
+   -- date_edd AS current_value
+--  FROM maternal_core
+--  WHERE date_edd IS NOT NULL
+ --   AND TRIM(date_edd) != ''
+ --   AND TRY_CAST(date_edd AS DATE) > CURRENT_DATE
+ --   AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+--),
+
+date_edd_before_lmp AS (
+  -- date_edd cannot be before LMP
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_edd' AS variable,
+    'date_edd is before date_lmp (EDD should be after LMP)' AS issue,
+    date_edd AS current_value
+  FROM maternal_core
+  WHERE date_edd IS NOT NULL
+    AND TRIM(date_edd) != ''
+    AND date_lmp IS NOT NULL
+    AND TRIM(date_lmp) != ''
+    AND TRY_CAST(date_edd AS DATE) < TRY_CAST(date_lmp AS DATE)
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_parity_birth AS (
+  -- Missing parity_birth
+  SELECT
+    record_id,
+    datetime_entry,
+    'parity_birth' AS variable,
+    'Missing parity_birth' AS issue,
+    parity_birth AS current_value
+  FROM maternal_core
+  WHERE (parity_birth IS NULL OR TRIM(parity_birth) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_parity_birth AS (
+  -- parity_birth out of range (expected 0-15)
+  SELECT
+    record_id,
+    datetime_entry,
+    'parity_birth' AS variable,
+    'parity_birth out of range (expected 0-15)' AS issue,
+    parity_birth AS current_value
+  FROM maternal_core
+  WHERE parity_birth IS NOT NULL
+    AND TRIM(parity_birth) != ''
+    AND TRIM(parity_birth) != 'NI'
+    AND (
+      TRY_CAST(parity_birth AS INTEGER) IS NULL
+      OR TRY_CAST(parity_birth AS INTEGER) < 0
+      OR TRY_CAST(parity_birth AS INTEGER) > 15
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_parity_miscarriages AS (
+  -- Missing parity_miscarriages
+  SELECT
+    record_id,
+    datetime_entry,
+    'parity_miscarriages' AS variable,
+    'Missing parity_miscarriages' AS issue,
+    parity_miscarriages AS current_value
+  FROM maternal_core
+  WHERE (parity_miscarriages IS NULL OR TRIM(parity_miscarriages) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_parity_miscarriages AS (
+  -- parity_miscarriages out of range (expected 0-15)
+  SELECT
+    record_id,
+    datetime_entry,
+    'parity_miscarriages' AS variable,
+    'parity_miscarriages out of range (expected 0-15)' AS issue,
+    parity_miscarriages AS current_value
+  FROM maternal_core
+  WHERE parity_miscarriages IS NOT NULL
+    AND TRIM(parity_miscarriages) != ''
+    AND TRIM(parity_miscarriages) != 'NI'
+    AND (
+      TRY_CAST(parity_miscarriages AS INTEGER) IS NULL
+      OR TRY_CAST(parity_miscarriages AS INTEGER) < 0
+      OR TRY_CAST(parity_miscarriages AS INTEGER) > 15
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_gravid_count AS (
+  -- Missing gravid_count
+  SELECT
+    record_id,
+    datetime_entry,
+    'gravid_count' AS variable,
+    'Missing gravid_count' AS issue,
+    gravid_count AS current_value
+  FROM maternal_core
+  WHERE (gravid_count IS NULL OR TRIM(gravid_count) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_gravid_count AS (
+  -- gravid_count out of range (expected 1-20)
+  SELECT
+    record_id,
+    datetime_entry,
+    'gravid_count' AS variable,
+    'gravid_count out of range (expected 1-20)' AS issue,
+    gravid_count AS current_value
+  FROM maternal_core
+  WHERE gravid_count IS NOT NULL
+    AND TRIM(gravid_count) != ''
+    AND TRIM(gravid_count) != 'NI'
+    AND (
+      TRY_CAST(gravid_count AS INTEGER) IS NULL
+      OR TRY_CAST(gravid_count AS INTEGER) < 1
+      OR TRY_CAST(gravid_count AS INTEGER) > 20
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_attended_anc AS (
+  -- Missing is_attended_anc
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_attended_anc' AS variable,
+    'Missing is_attended_anc' AS issue,
+    is_attended_anc AS current_value
+  FROM maternal_core
+  WHERE (is_attended_anc IS NULL OR TRIM(is_attended_anc) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_date_first_anc AS (
+  -- Missing date_first_anc (only when is_attended_anc = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_first_anc' AS variable,
+    'Missing date_first_anc (attended ANC but no date recorded)' AS issue,
+    date_first_anc AS current_value
+  FROM maternal_core
+  WHERE (date_first_anc IS NULL OR TRIM(date_first_anc) = '')
+    AND is_attended_anc = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+future_date_first_anc AS (
+  -- Future date_first_anc (only when is_attended_anc = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_first_anc' AS variable,
+    'Future date_first_anc' AS issue,
+    date_first_anc AS current_value
+  FROM maternal_core
+  WHERE date_first_anc IS NOT NULL
+    AND TRIM(date_first_anc) != ''
+    AND is_attended_anc = '1'
+    AND TRY_CAST(date_first_anc AS DATE) > CURRENT_DATE
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+date_first_anc_after_admission AS (
+  -- date_first_anc cannot be after admission_date (only when is_attended_anc = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_first_anc' AS variable,
+    'date_first_anc is after admission_date (ANC should occur before admission)' AS issue,
+    date_first_anc AS current_value
+  FROM maternal_core
+  WHERE date_first_anc IS NOT NULL
+    AND TRIM(date_first_anc) != ''
+    AND is_attended_anc = '1'
+    AND admission_date IS NOT NULL
+    AND TRIM(admission_date) != ''
+    AND TRY_CAST(date_first_anc AS DATE) > TRY_CAST(admission_date AS DATE)
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_anc_clinic_name AS (
+  -- Missing anc_clinic_name (only when is_attended_anc = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'anc_clinic_name' AS variable,
+    'Missing anc_clinic_name (attended ANC but no clinic name recorded)' AS issue,
+    anc_clinic_name AS current_value
+  FROM maternal_core
+  WHERE (anc_clinic_name IS NULL OR TRIM(anc_clinic_name) = '')
+    AND is_attended_anc = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_anc_clinic_name_other AS (
+  -- Missing anc_clinic_name_other when anc_clinic_name = 'OTH'
+  SELECT
+    record_id,
+    datetime_entry,
+    'anc_clinic_name_other' AS variable,
+    'Missing anc_clinic_name_other (clinic name = Other but no specification)' AS issue,
+    anc_clinic_name_other AS current_value
+  FROM maternal_core
+  WHERE (anc_clinic_name_other IS NULL OR TRIM(anc_clinic_name_other) = '')
+    AND is_attended_anc = '1'
+    AND anc_clinic_name IS NOT NULL
+    AND TRIM(anc_clinic_name) = 'OTH'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_count_anc_visits AS (
+  -- Missing count_anc_visits (only when is_attended_anc = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'count_anc_visits' AS variable,
+    'Missing count_anc_visits (attended ANC but no visit count recorded)' AS issue,
+    count_anc_visits AS current_value
+  FROM maternal_core
+  WHERE (count_anc_visits IS NULL OR TRIM(count_anc_visits) = '')
+    AND is_attended_anc = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_count_anc_visits AS (
+  -- count_anc_visits out of range (expected 1-20)
+  SELECT
+    record_id,
+    datetime_entry,
+    'count_anc_visits' AS variable,
+    'count_anc_visits out of range (expected 1-20 visits)' AS issue,
+    count_anc_visits AS current_value
+  FROM maternal_core
+  WHERE count_anc_visits IS NOT NULL
+    AND TRIM(count_anc_visits) != ''
+    AND TRIM(count_anc_visits) != 'NI'
+    AND is_attended_anc = '1'
+    AND (
+      TRY_CAST(count_anc_visits AS INTEGER) IS NULL
+      OR TRY_CAST(count_anc_visits AS INTEGER) < 1
+      OR TRY_CAST(count_anc_visits AS INTEGER) > 20
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+missing_is_anc_us AS (
+  -- Missing is_anc_us
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_anc_us' AS variable,
+    'Missing is_anc_us' AS issue,
+    is_anc_us AS current_value
+  FROM maternal_core
+  WHERE (is_anc_us IS NULL OR TRIM(is_anc_us) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_date_anc_us_first AS (
+  -- Missing date_anc_us_first (only when is_anc_us = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_anc_us_first' AS variable,
+    'Missing date_anc_us_first (ANC ultrasound = Yes but no date recorded)' AS issue,
+    date_anc_us_first AS current_value
+  FROM maternal_core
+  WHERE (date_anc_us_first IS NULL OR TRIM(date_anc_us_first) = '')
+    AND is_anc_us = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+future_date_anc_us_first AS (
+  -- Future date_anc_us_first (only when is_anc_us = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_anc_us_first' AS variable,
+    'Future date_anc_us_first' AS issue,
+    date_anc_us_first AS current_value
+  FROM maternal_core
+  WHERE date_anc_us_first IS NOT NULL
+    AND TRIM(date_anc_us_first) != ''
+    AND is_anc_us = '1'
+    AND TRY_CAST(date_anc_us_first AS DATE) > CURRENT_DATE
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+date_anc_us_first_after_admission AS (
+  -- date_anc_us_first cannot be after admission_date (only when is_anc_us = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_anc_us_first' AS variable,
+    'date_anc_us_first is after admission_date (ANC ultrasound should occur before admission)' AS issue,
+    date_anc_us_first AS current_value
+  FROM maternal_core
+  WHERE date_anc_us_first IS NOT NULL
+    AND TRIM(date_anc_us_first) != ''
+    AND is_anc_us = '1'
+    AND admission_date IS NOT NULL
+    AND TRIM(admission_date) != ''
+    AND TRY_CAST(date_anc_us_first AS DATE) > TRY_CAST(admission_date AS DATE)
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_gestation AS (
+  -- Missing gestation
+  SELECT
+    record_id,
+    datetime_entry,
+    'gestation' AS variable,
+    'Missing gestation' AS issue,
+    gestation AS current_value
+  FROM maternal_core
+  WHERE (gestation IS NULL OR TRIM(gestation) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_gestation AS (
+  -- gestation out of range (expected 1-45 weeks)
+  SELECT
+    record_id,
+    datetime_entry,
+    'gestation' AS variable,
+    'gestation out of range (expected 1-45 weeks)' AS issue,
+    gestation AS current_value
+  FROM maternal_core
+  WHERE gestation IS NOT NULL
+    AND TRIM(gestation) != ''
+    AND TRIM(gestation) != 'NI'
+    AND (
+      TRY_CAST(gestation AS INTEGER) IS NULL
+      OR TRY_CAST(gestation AS INTEGER) < 1
+      OR TRY_CAST(gestation AS INTEGER) > 45
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_gest_lmp AS (
+  -- Missing is_gest_lmp
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_gest_lmp' AS variable,
+    'Missing is_gest_lmp' AS issue,
+    is_gest_lmp AS current_value
+  FROM maternal_core
+  WHERE (is_gest_lmp IS NULL OR TRIM(is_gest_lmp) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_gestation_from_lmp AS (
+  -- Missing gestation_from_lmp (only when is_gest_lmp = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'gestation_from_lmp' AS variable,
+    'Missing gestation_from_lmp (gestation from LMP = Yes but no value recorded)' AS issue,
+    gestation_from_lmp AS current_value
+  FROM maternal_core
+  WHERE (gestation_from_lmp IS NULL OR TRIM(gestation_from_lmp) = '')
+    AND is_gest_lmp = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-08-05 09:42:05'
+),
+
+invalid_gestation_from_lmp AS (
+  -- gestation_from_lmp out of range (expected 1-45 weeks)
+  SELECT
+    record_id,
+    datetime_entry,
+    'gestation_from_lmp' AS variable,
+    'gestation_from_lmp out of range (expected 1-45 weeks)' AS issue,
+    gestation_from_lmp AS current_value
+  FROM maternal_core
+  WHERE gestation_from_lmp IS NOT NULL
+    AND TRIM(gestation_from_lmp) != ''
+    AND TRIM(gestation_from_lmp) != 'NI'
+    AND is_gest_lmp = '1'
+    AND (
+      TRY_CAST(gestation_from_lmp AS INTEGER) IS NULL
+      OR TRY_CAST(gestation_from_lmp AS INTEGER) < 1
+      OR TRY_CAST(gestation_from_lmp AS INTEGER) > 45
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-08-05 09:42:05'
+),
+
+
+missing_is_gest_us AS (
+  -- Missing is_gest_us
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_gest_us' AS variable,
+    'Missing is_gest_us' AS issue,
+    is_gest_us AS current_value
+  FROM maternal_core
+  WHERE (is_gest_us IS NULL OR TRIM(is_gest_us) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_gestation_from_us AS (
+  -- Missing gestation_from_us (only when is_gest_us = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'gestation_from_us' AS variable,
+    'Missing gestation_from_us (gestation from U/S = Yes but no value recorded)' AS issue,
+    gestation_from_us AS current_value
+  FROM maternal_core
+  WHERE (gestation_from_us IS NULL OR TRIM(gestation_from_us) = '')
+    AND is_gest_us = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-08-05 10:03:26'
+),
+
+invalid_gestation_from_us AS (
+  -- gestation_from_us out of range (expected 1-45 weeks)
+  SELECT
+    record_id,
+    datetime_entry,
+    'gestation_from_us' AS variable,
+    'gestation_from_us out of range (expected 1-45 weeks)' AS issue,
+    gestation_from_us AS current_value
+  FROM maternal_core
+  WHERE gestation_from_us IS NOT NULL
+    AND TRIM(gestation_from_us) != ''
+    AND TRIM(gestation_from_us) != 'NI'
+    AND is_gest_us = '1'
+    AND (
+      TRY_CAST(gestation_from_us AS INTEGER) IS NULL
+      OR TRY_CAST(gestation_from_us AS INTEGER) < 1
+      OR TRY_CAST(gestation_from_us AS INTEGER) > 45
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-08-05 10:03:26'
+),
+
+
+missing_is_pocus_used AS (
+  -- Missing is_pocus_used
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_pocus_used' AS variable,
+    'Missing is_pocus_used' AS issue,
+    is_pocus_used AS current_value
+  FROM maternal_core
+  WHERE (is_pocus_used IS NULL OR TRIM(is_pocus_used) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_mother_weight_kg AS (
+  -- Missing mother_weight_kg
+  SELECT
+    record_id,
+    datetime_entry,
+    'mother_weight_kg' AS variable,
+    'Missing mother_weight_kg' AS issue,
+    mother_weight_kg AS current_value
+  FROM maternal_core
+  WHERE (mother_weight_kg IS NULL OR TRIM(mother_weight_kg) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_mother_weight_kg AS (
+  -- mother_weight_kg out of range (expected 30-200 kg)
+  SELECT
+    record_id,
+    datetime_entry,
+    'mother_weight_kg' AS variable,
+    'mother_weight_kg out of range (expected 30-200 kg)' AS issue,
+    mother_weight_kg AS current_value
+  FROM maternal_core
+  WHERE mother_weight_kg IS NOT NULL
+    AND TRIM(mother_weight_kg) != ''
+    AND TRIM(mother_weight_kg) != 'NI'
+    AND (
+      TRY_CAST(mother_weight_kg AS DOUBLE) IS NULL
+      OR TRY_CAST(mother_weight_kg AS DOUBLE) < 30
+      OR TRY_CAST(mother_weight_kg AS DOUBLE) > 200
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_mother_height_cm AS (
+  -- Missing mother_height_cm
+  SELECT
+    record_id,
+    datetime_entry,
+    'mother_height_cm' AS variable,
+    'Missing mother_height_cm' AS issue,
+    mother_height_cm AS current_value
+  FROM maternal_core
+  WHERE (mother_height_cm IS NULL OR TRIM(mother_height_cm) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_mother_height_cm AS (
+  -- mother_height_cm out of range (expected 100-220 cm)
+  SELECT
+    record_id,
+    datetime_entry,
+    'mother_height_cm' AS variable,
+    'mother_height_cm out of range (expected 100-220 cm)' AS issue,
+    mother_height_cm AS current_value
+  FROM maternal_core
+  WHERE mother_height_cm IS NOT NULL
+    AND TRIM(mother_height_cm) != ''
+    AND TRIM(mother_height_cm) != 'NI'
+    AND (
+      TRY_CAST(mother_height_cm AS DOUBLE) IS NULL
+      OR TRY_CAST(mother_height_cm AS DOUBLE) < 100
+      OR TRY_CAST(mother_height_cm AS DOUBLE) > 220
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_mother_bmi AS (
+  -- Missing mother_bmi
+  SELECT
+    record_id,
+    datetime_entry,
+    'mother_bmi' AS variable,
+    'Missing mother_bmi' AS issue,
+    mother_bmi AS current_value
+  FROM maternal_core
+  WHERE (mother_bmi IS NULL OR TRIM(mother_bmi) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_mother_bmi AS (
+  -- mother_bmi out of range (expected 12-60)
+  SELECT
+    record_id,
+    datetime_entry,
+    'mother_bmi' AS variable,
+    'mother_bmi out of range (expected 12-60)' AS issue,
+    mother_bmi AS current_value
+  FROM maternal_core
+  WHERE mother_bmi IS NOT NULL
+    AND TRIM(mother_bmi) != ''
+    AND TRIM(mother_bmi) != 'NI'
+    AND (
+      TRY_CAST(mother_bmi AS DOUBLE) IS NULL
+      OR TRY_CAST(mother_bmi AS DOUBLE) < 12
+      OR TRY_CAST(mother_bmi AS DOUBLE) > 60
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_muac AS (
+  -- Missing muac
+  SELECT
+    record_id,
+    datetime_entry,
+    'muac' AS variable,
+    'Missing muac' AS issue,
+    muac AS current_value
+  FROM maternal_core
+  WHERE (muac IS NULL OR TRIM(muac) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-13 13:46:09'
+),
+
+invalid_muac AS (
+  -- muac out of range (expected 10-50 cm)
+  SELECT
+    record_id,
+    datetime_entry,
+    'muac' AS variable,
+    'muac out of range (expected 10-50 cm)' AS issue,
+    muac AS current_value
+  FROM maternal_core
+  WHERE muac IS NOT NULL
+    AND TRIM(muac) != ''
+    AND TRIM(muac) != 'NI'
+    AND (
+      TRY_CAST(muac AS DOUBLE) IS NULL
+      OR TRY_CAST(muac AS DOUBLE) < 10
+      OR TRY_CAST(muac AS DOUBLE) > 50
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-13 13:46:09'
+),
+
+
+missing_is_lower_abd_pain AS (
+  -- Missing is_lower_abd_pain
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_lower_abd_pain' AS variable,
+    'Missing is_lower_abd_pain' AS issue,
+    is_lower_abd_pain AS current_value
+  FROM maternal_core
+  WHERE (is_lower_abd_pain IS NULL OR TRIM(is_lower_abd_pain) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_off_vag_discharge AS (
+  -- Missing is_off_vag_discharge
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_off_vag_discharge' AS variable,
+    'Missing is_off_vag_discharge' AS issue,
+    is_off_vag_discharge AS current_value
+  FROM maternal_core
+  WHERE (is_off_vag_discharge IS NULL OR TRIM(is_off_vag_discharge) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_diff_breathing AS (
+  -- Missing is_diff_breathing
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_diff_breathing' AS variable,
+    'Missing is_diff_breathing' AS issue,
+    is_diff_breathing AS current_value
+  FROM maternal_core
+  WHERE (is_diff_breathing IS NULL OR TRIM(is_diff_breathing) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_abd_pain_other AS (
+  -- Missing is_abd_pain_other
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_abd_pain_other' AS variable,
+    'Missing is_abd_pain_other' AS issue,
+    is_abd_pain_other AS current_value
+  FROM maternal_core
+  WHERE (is_abd_pain_other IS NULL OR TRIM(is_abd_pain_other) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_screen_tb AS (
+  -- Missing is_screen_tb
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_screen_tb' AS variable,
+    'Missing is_screen_tb' AS issue,
+    is_screen_tb AS current_value
+  FROM maternal_core
+  WHERE (is_screen_tb IS NULL OR TRIM(is_screen_tb) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_chest_pain AS (
+  -- Missing is_chest_pain
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_chest_pain' AS variable,
+    'Missing is_chest_pain' AS issue,
+    is_chest_pain AS current_value
+  FROM maternal_core
+  WHERE (is_chest_pain IS NULL OR TRIM(is_chest_pain) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_weight_loss AS (
+  -- Missing is_weight_loss
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_weight_loss' AS variable,
+    'Missing is_weight_loss' AS issue,
+    is_weight_loss AS current_value
+  FROM maternal_core
+  WHERE (is_weight_loss IS NULL OR TRIM(is_weight_loss) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_reduced_f_movements AS (
+  -- Missing is_reduced_f_movements
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_reduced_f_movements' AS variable,
+    'Missing is_reduced_f_movements' AS issue,
+    is_reduced_f_movements AS current_value
+  FROM maternal_core
+  WHERE (is_reduced_f_movements IS NULL OR TRIM(is_reduced_f_movements) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_vomiting AS (
+  -- Missing is_vomiting
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_vomiting' AS variable,
+    'Missing is_vomiting' AS issue,
+    is_vomiting AS current_value
+  FROM maternal_core
+  WHERE (is_vomiting IS NULL OR TRIM(is_vomiting) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_visual_changes AS (
+  -- Missing is_visual_changes
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_visual_changes' AS variable,
+    'Missing is_visual_changes' AS issue,
+    is_visual_changes AS current_value
+  FROM maternal_core
+  WHERE (is_visual_changes IS NULL OR TRIM(is_visual_changes) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_fever AS (
+  -- Missing is_fever
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_fever' AS variable,
+    'Missing is_fever' AS issue,
+    is_fever AS current_value
+  FROM maternal_core
+  WHERE (is_fever IS NULL OR TRIM(is_fever) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_painful_urination AS (
+  -- Missing is_painful_urination
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_painful_urination' AS variable,
+    'Missing is_painful_urination' AS issue,
+    is_painful_urination AS current_value
+  FROM maternal_core
+  WHERE (is_painful_urination IS NULL OR TRIM(is_painful_urination) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_cough_lt_2_wks AS (
+  -- Missing is_cough_lt_2_wks
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_cough_lt_2_wks' AS variable,
+    'Missing is_cough_lt_2_wks' AS issue,
+    is_cough_lt_2_wks AS current_value
+  FROM maternal_core
+  WHERE (is_cough_lt_2_wks IS NULL OR TRIM(is_cough_lt_2_wks) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_cough_gt_or_equal_2_wks AS (
+  -- Missing is_cough_gt_or_equal_2_wks
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_cough_gt_or_equal_2_wks' AS variable,
+    'Missing is_cough_gt_or_equal_2_wks' AS issue,
+    is_cough_gt_or_equal_2_wks AS current_value
+  FROM maternal_core
+  WHERE (is_cough_gt_or_equal_2_wks IS NULL OR TRIM(is_cough_gt_or_equal_2_wks) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_drainage_of_amn_fluid AS (
+  -- Missing is_drainage_of_amn_fluid
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_drainage_of_amn_fluid' AS variable,
+    'Missing is_drainage_of_amn_fluid' AS issue,
+    is_drainage_of_amn_fluid AS current_value
+  FROM maternal_core
+  WHERE (is_drainage_of_amn_fluid IS NULL OR TRIM(is_drainage_of_amn_fluid) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_oedema AS (
+  -- Missing is_oedema
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_oedema' AS variable,
+    'Missing is_oedema' AS issue,
+    is_oedema AS current_value
+  FROM maternal_core
+  WHERE (is_oedema IS NULL OR TRIM(is_oedema) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_is_other_complaint AS (
+  -- Missing is_other_complaint
+  SELECT
+    record_id,
+    datetime_entry,
+    'is_other_complaint' AS variable,
+    'Missing is_other_complaint' AS issue,
+    is_other_complaint AS current_value
+  FROM maternal_core
+  WHERE (is_other_complaint IS NULL OR TRIM(is_other_complaint) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_date_drainage_of_amn_fluid AS (
+  -- Missing date_drainage_of_amn_fluid (only when is_drainage_of_amn_fluid = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_drainage_of_amn_fluid' AS variable,
+    'Missing date_drainage_of_amn_fluid (drainage of amniotic fluid = Yes but no date recorded)' AS issue,
+    date_drainage_of_amn_fluid AS current_value
+  FROM maternal_core
+  WHERE (date_drainage_of_amn_fluid IS NULL OR TRIM(date_drainage_of_amn_fluid) = '')
+    AND is_drainage_of_amn_fluid = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-06 12:24:54'
+),
+
+future_date_drainage_of_amn_fluid AS (
+  -- Future date_drainage_of_amn_fluid (only when is_drainage_of_amn_fluid = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_drainage_of_amn_fluid' AS variable,
+    'Future date_drainage_of_amn_fluid' AS issue,
+    date_drainage_of_amn_fluid AS current_value
+  FROM maternal_core
+  WHERE date_drainage_of_amn_fluid IS NOT NULL
+    AND TRIM(date_drainage_of_amn_fluid) != ''
+    AND is_drainage_of_amn_fluid = '1'
+    AND TRY_CAST(date_drainage_of_amn_fluid AS DATE) > CURRENT_DATE
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-06 12:24:54'
+),
+
+date_drainage_after_admission AS (
+  -- date_drainage_of_amn_fluid cannot be after admission_date
+  SELECT
+    record_id,
+    datetime_entry,
+    'date_drainage_of_amn_fluid' AS variable,
+    'date_drainage_of_amn_fluid is after admission_date (drainage should occur before admission)' AS issue,
+    date_drainage_of_amn_fluid AS current_value
+  FROM maternal_core
+  WHERE date_drainage_of_amn_fluid IS NOT NULL
+    AND TRIM(date_drainage_of_amn_fluid) != ''
+    AND is_drainage_of_amn_fluid = '1'
+    AND admission_date IS NOT NULL
+    AND TRIM(admission_date) != ''
+    AND TRY_CAST(date_drainage_of_amn_fluid AS DATE) > TRY_CAST(admission_date AS DATE)
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-06 12:24:54'
+),
+
+
+missing_time_drainage_of_amn_fluid AS (
+  -- Missing time_drainage_of_amn_fluid (only when is_drainage_of_amn_fluid = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'time_drainage_of_amn_fluid' AS variable,
+    'Missing time_drainage_of_amn_fluid (drainage of amniotic fluid = Yes but no time recorded)' AS issue,
+    time_drainage_of_amn_fluid AS current_value
+  FROM maternal_core
+  WHERE (time_drainage_of_amn_fluid IS NULL OR TRIM(time_drainage_of_amn_fluid) = '')
+    AND is_drainage_of_amn_fluid = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-06 12:24:54'
+),
+
+invalid_time_drainage_of_amn_fluid AS (
+  -- Invalid time_drainage_of_amn_fluid format (expected HH:MM 12hr or 24hr)
+  SELECT
+    record_id,
+    datetime_entry,
+    'time_drainage_of_amn_fluid' AS variable,
+    'Invalid time_drainage_of_amn_fluid format (expected HH:MM 12hr or 24hr)' AS issue,
+    time_drainage_of_amn_fluid AS current_value
+  FROM maternal_core
+  WHERE time_drainage_of_amn_fluid IS NOT NULL
+    AND TRIM(time_drainage_of_amn_fluid) != ''
+    AND TRIM(time_drainage_of_amn_fluid) != 'NI'
+    AND is_drainage_of_amn_fluid = '1'
+    AND NOT (
+      regexp_matches(TRIM(time_drainage_of_amn_fluid), '^(0?[1-9]|1[0-2]):[0-5][0-9]$')
+      OR
+      regexp_matches(TRIM(time_drainage_of_amn_fluid), '^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-06 12:24:54'
+),
+
+missing_time_drainage_units AS (
+  -- Missing time_drainage_units when time_drainage_of_amn_fluid is present and not NI
+  SELECT
+    record_id,
+    datetime_entry,
+    'time_drainage_units' AS variable,
+    'Missing time_drainage_units' AS issue,
+    time_drainage_units AS current_value
+  FROM maternal_core
+  WHERE (time_drainage_units IS NULL OR TRIM(time_drainage_units) = '')
+    AND time_drainage_of_amn_fluid IS NOT NULL
+    AND TRIM(time_drainage_of_amn_fluid) != ''
+    AND TRIM(time_drainage_of_amn_fluid) != 'NI'
+    AND is_drainage_of_amn_fluid = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-06 12:24:54'
+),
+
+
+missing_oedema_location_oth AS (
+  -- Missing oedema_location_oth (only when oedema_location___999 = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'oedema_location_oth' AS variable,
+    'Missing oedema_location_oth (oedema location = Other but no specification)' AS issue,
+    oedema_location_oth AS current_value
+  FROM maternal_core
+  WHERE (oedema_location_oth IS NULL OR TRIM(oedema_location_oth) = '')
+    AND oedema_location___999 = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_other_complaints_specify AS (
+  -- Missing other_complaints specification (only when is_other_complaint = '1')
+  SELECT
+    record_id,
+    datetime_entry,
+    'other_complaints' AS variable,
+    'Missing other_complaints specification (other complaint = Yes but no details provided)' AS issue,
+    other_complaints AS current_value
+  FROM maternal_core
+  WHERE (other_complaints IS NULL OR TRIM(other_complaints) = '')
+    AND is_other_complaint = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-13 15:57:06'
+),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    -- combine all checks
+    all_issues AS (
+      SELECT * FROM missing_document_source
+      UNION ALL
+      SELECT * FROM missing_hosp_id
+      UNION ALL
+      SELECT * FROM missing_admission_type
+      UNION ALL
+      SELECT * FROM missing_mother_ip_no
+      UNION ALL
+      SELECT * FROM missing_mother_age
+      UNION ALL
+      SELECT * FROM invalid_mother_age
+      UNION ALL
+      SELECT * FROM missing_mother_county
+      UNION ALL
+      SELECT * FROM missing_mother_subcounty
+      UNION ALL
+      SELECT * FROM missing_admission_date
+      UNION ALL
+      SELECT * FROM future_admission_date
+      UNION ALL
+      SELECT * FROM missing_admission_time
+      UNION ALL
+      SELECT * FROM missing_admission_time_unit
+      UNION ALL
+      SELECT * FROM missing_mother_residence
+      UNION ALL
+      SELECT * FROM missing_marriage_status
+      UNION ALL
+      SELECT * FROM missing_education_level
+      -- UNION ALL
+      -- SELECT * FROM missing_nationality
+      UNION ALL
+      SELECT * FROM missing_mother_occupation
+      UNION ALL
+      SELECT * FROM missing_mother_occupation_other
+      UNION ALL
+      SELECT * FROM missing_payment_method
+      UNION ALL
+      SELECT * FROM missing_payment_other
+      UNION ALL
+      SELECT * FROM missing_is_referral
+      UNION ALL
+      SELECT * FROM missing_referral_type
+      UNION ALL
+      SELECT * FROM missing_referring_facility_level
+      UNION ALL
+      SELECT * FROM missing_referring_facility_name
+      UNION ALL
+      SELECT * FROM missing_referring_facility_other
+      UNION ALL
+      SELECT * FROM missing_is_consented
+      UNION ALL
+      SELECT * FROM missing_study_id
+      UNION ALL
+      SELECT * FROM invalid_study_id
+      UNION ALL
+      SELECT * FROM missing_registering_clerk
+      UNION ALL
+      SELECT * FROM missing_date_clerking
+      UNION ALL
+      SELECT * FROM future_date_clerking
+      UNION ALL
+      SELECT * FROM early_date_clerking
+      UNION ALL
+      SELECT * FROM missing_time_clerking
+      UNION ALL
+      SELECT * FROM invalid_time_clerking
+      UNION ALL
+      SELECT * FROM missing_clerking_time_unit
+      UNION ALL
+      SELECT * FROM missing_adm_resp_rate
+      UNION ALL
+      SELECT * FROM invalid_adm_resp_rate
+      UNION ALL
+      SELECT * FROM missing_adm_bp_systolic
+      UNION ALL
+      SELECT * FROM invalid_adm_bp_systolic
+      UNION ALL
+      SELECT * FROM missing_adm_bp_diastolic
+      UNION ALL
+      SELECT * FROM invalid_adm_bp_diastolic
+      UNION ALL
+      SELECT * FROM missing_adm_heart_rate
+      UNION ALL
+      SELECT * FROM invalid_adm_heart_rate
+      UNION ALL
+      SELECT * FROM missing_adm_spo2
+      UNION ALL
+      SELECT * FROM invalid_adm_spo2
+      UNION ALL
+      SELECT * FROM missing_adm_temp
+      UNION ALL
+      SELECT * FROM invalid_adm_temp
+      UNION ALL
+      SELECT * FROM missing_is_airway_not_patent
+      UNION ALL
+      SELECT * FROM missing_is_abnormal_resp_rate
+      UNION ALL
+      SELECT * FROM missing_is_vaginal_bleeding
+      UNION ALL
+      SELECT * FROM missing_is_abnormal_temp
+      UNION ALL
+      SELECT * FROM missing_is_unconscious
+      UNION ALL
+      SELECT * FROM missing_is_convulsing
+      UNION ALL
+      SELECT * FROM missing_is_epigastric_pain
+      UNION ALL
+      SELECT * FROM missing_is_abnormal_heart_rate
+      UNION ALL
+      SELECT * FROM missing_is_abnormal_f_heart_rate
+      UNION ALL
+      SELECT * FROM missing_is_headache
+      UNION ALL
+      SELECT * FROM missing_is_abnormal_systolic_bp
+      UNION ALL
+      SELECT * FROM missing_is_dysponea
+      UNION ALL
+      SELECT * FROM missing_is_rom_gt_18h
+      UNION ALL
+      SELECT * FROM missing_is_abnormal_diastolic_bp
+      UNION ALL
+      SELECT * FROM missing_is_visual_impairment
+      UNION ALL
+      SELECT * FROM missing_is_body_swelling
+      UNION ALL
+      SELECT * FROM missing_is_rom_early
+      UNION ALL
+      SELECT * FROM missing_is_other_obs_emergency
+      UNION ALL
+      SELECT * FROM missing_name_triaging_clinician
+      UNION ALL
+      SELECT * FROM missing_date_triaging
+      UNION ALL
+      SELECT * FROM future_date_triaging
+      UNION ALL
+      SELECT * FROM missing_time_triaging
+      UNION ALL
+      SELECT * FROM invalid_time_triaging
+      UNION ALL
+      SELECT * FROM missing_triaging_time_unit
+      UNION ALL
+      SELECT * FROM missing_date_lmp_complete_status
+      UNION ALL
+      SELECT * FROM missing_date_lmp
+      UNION ALL
+      SELECT * FROM future_date_lmp
+      UNION ALL
+      SELECT * FROM date_lmp_after_admission
+      UNION ALL
+      SELECT * FROM missing_date_edd_complete_status
+      UNION ALL
+      SELECT * FROM missing_date_edd
+      -- UNION ALL
+      -- SELECT * FROM future_date_edd
+      UNION ALL
+      SELECT * FROM date_edd_before_lmp
+      UNION
+      SELECT * FROM missing_parity_birth
+      UNION ALL
+      SELECT * FROM invalid_parity_birth
+      UNION ALL
+      SELECT * FROM missing_parity_miscarriages
+      UNION ALL
+      SELECT * FROM invalid_parity_miscarriages
+      UNION ALL
+      SELECT * FROM missing_gravid_count
+      UNION ALL
+      SELECT * FROM invalid_gravid_count
+      UNION ALL
+      SELECT * FROM missing_date_first_anc
+      UNION ALL
+      SELECT * FROM future_date_first_anc
+      UNION ALL
+      SELECT * FROM date_first_anc_after_admission
+      UNION ALL
+      SELECT * FROM missing_anc_clinic_name
+      UNION ALL
+      SELECT * FROM missing_anc_clinic_name_other
+      UNION ALL
+      SELECT * FROM missing_count_anc_visits
+      UNION ALL
+      SELECT * FROM invalid_count_anc_visits
+      UNION ALL
+      SELECT * FROM missing_is_anc_us
+      UNION ALL
+      SELECT * FROM missing_date_anc_us_first
+      UNION ALL
+      SELECT * FROM future_date_anc_us_first
+      UNION ALL
+      SELECT * FROM date_anc_us_first_after_admission
+      UNION ALL
+      SELECT * FROM missing_gestation
+      UNION ALL
+      SELECT * FROM invalid_gestation
+      UNION ALL
+      SELECT * FROM missing_is_gest_lmp
+      UNION ALL
+      SELECT * FROM missing_gestation_from_lmp
+      UNION ALL
+      SELECT * FROM invalid_gestation_from_lmp
+      UNION ALL
+      SELECT * FROM missing_is_gest_us
+      UNION ALL
+      SELECT * FROM missing_gestation_from_us
+      UNION ALL
+      SELECT * FROM invalid_gestation_from_us
+      UNION ALL
+      SELECT * FROM missing_is_pocus_used
+      UNION ALL
+      SELECT * FROM missing_mother_weight_kg
+      UNION ALL
+      SELECT * FROM invalid_mother_weight_kg
+      UNION ALL
+      SELECT * FROM missing_mother_height_cm
+      UNION ALL
+      SELECT * FROM invalid_mother_height_cm
+      UNION ALL
+      SELECT * FROM missing_mother_bmi
+    UNION ALL
+    SELECT * FROM invalid_mother_bmi
+    UNION ALL
+    SELECT * FROM missing_muac
+    UNION ALL
+    SELECT * FROM invalid_muac
+    UNION ALL
+    SELECT * FROM missing_is_lower_abd_pain
+    UNION ALL
+    SELECT * FROM missing_is_off_vag_discharge
+    UNION ALL
+    SELECT * FROM missing_is_diff_breathing
+    UNION ALL
+    SELECT * FROM missing_is_abd_pain_other
+    UNION ALL
+    SELECT * FROM missing_is_screen_tb
+    UNION ALL
+    SELECT * FROM missing_is_chest_pain
+    UNION ALL
+    SELECT * FROM missing_is_weight_loss
+    UNION ALL
+    SELECT * FROM missing_is_reduced_f_movements
+    UNION ALL
+    SELECT * FROM missing_is_vomiting
+    UNION ALL
+    SELECT * FROM missing_is_visual_changes
+    UNION ALL
+    SELECT * FROM missing_is_fever
+    UNION ALL
+    SELECT * FROM missing_is_painful_urination
+    UNION ALL
+    SELECT * FROM missing_is_cough_lt_2_wks
+    UNION ALL
+    SELECT * FROM missing_is_cough_gt_or_equal_2_wks
+    UNION ALL
+    SELECT * FROM missing_is_drainage_of_amn_fluid
+    UNION ALL
+    SELECT * FROM missing_is_oedema
+    UNION ALL
+    SELECT * FROM missing_is_other_complaint
+    UNION ALL
+    SELECT * FROM missing_date_drainage_of_amn_fluid
+    UNION ALL
+    SELECT * FROM future_date_drainage_of_amn_fluid
+    UNION ALL
+    SELECT * FROM date_drainage_after_admission
+    UNION ALL
+    SELECT * FROM missing_time_drainage_of_amn_fluid
+    UNION ALL
+    SELECT * FROM invalid_time_drainage_of_amn_fluid
+    UNION ALL
+    SELECT * FROM missing_time_drainage_units
+    UNION ALL
+    SELECT * FROM missing_oedema_location_oth
+    UNION ALL
+    SELECT * FROM missing_other_complaints_specify
+
+
+
+
+
+
+
+
+
+    )
+
+  SELECT *
+  FROM all_issues
+  WHERE CAST(datetime_entry AS TIMESTAMP) >= '{start_date}'
+    AND CAST(datetime_entry AS TIMESTAMP) <= '{end_date}'
+  ORDER BY record_id, variable
+"))
+
+# DBI::dbDisconnect(con)
