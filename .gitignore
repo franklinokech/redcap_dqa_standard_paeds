@@ -216,3 +216,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+data/
+
+
+# Data files and directories
+data/
+*.duckdb
+*.csv
+*.db
+*.sqlite
+*.sqlite3
+
+
+cin_maternal/data/
