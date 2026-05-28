@@ -20,8 +20,7 @@ source(here::here("common", "utils.R"))
 maternal_data <- fetch_redcap_data(
   api_token = Sys.getenv("REDCAP_CIN_MATERNAL_API_TOKEN"),
   redcap_url = Sys.getenv("REDCAP_URL"),
-  export_data_access_groups = TRUE,
-  datetime_range_begin = as.POSIXct("2025-09-08"),
+  export_data_access_groups = TRUE
 )
 
 # Save data to CSV
