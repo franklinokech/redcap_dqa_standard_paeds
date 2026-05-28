@@ -3572,6 +3572,262 @@ missing_is_depression_post_del AS (
     AND CAST(datetime_entry AS TIMESTAMP) >= '2025-05-09 08:32:44'
 ),
 
+missing_prev_year_of_delivery AS (
+  -- Missing prev_year_of_delivery
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'prev_year_of_delivery' AS variable,
+    'Missing prev_year_of_delivery' AS issue,
+    ppd.prev_year_of_delivery AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.prev_year_of_delivery IS NULL OR TRIM(ppd.prev_year_of_delivery) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_prev_year_of_delivery AS (
+  -- prev_year_of_delivery out of range (expected 1975 to current year)
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'prev_year_of_delivery' AS variable,
+    'prev_year_of_delivery out of range (expected 1975 to current year)' AS issue,
+    ppd.prev_year_of_delivery AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE ppd.prev_year_of_delivery IS NOT NULL
+    AND TRIM(ppd.prev_year_of_delivery) != ''
+    AND TRIM(ppd.prev_year_of_delivery) != 'NI'
+    AND (
+      TRY_CAST(ppd.prev_year_of_delivery AS INTEGER) IS NULL
+      OR TRY_CAST(ppd.prev_year_of_delivery AS INTEGER) < 1975
+      OR TRY_CAST(ppd.prev_year_of_delivery AS INTEGER) > EXTRACT(YEAR FROM CURRENT_DATE)
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_prev_gest AS (
+  -- Missing prev_gest
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'prev_gest' AS variable,
+    'Missing prev_gest' AS issue,
+    ppd.prev_gest AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.prev_gest IS NULL OR TRIM(ppd.prev_gest) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_prev_gest AS (
+  -- prev_gest out of range (expected 1-45 weeks)
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'prev_gest' AS variable,
+    'prev_gest out of range (expected 1-45 weeks)' AS issue,
+    ppd.prev_gest AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE ppd.prev_gest IS NOT NULL
+    AND TRIM(ppd.prev_gest) != ''
+    AND TRIM(ppd.prev_gest) != 'NI'
+    AND TRIM(ppd.prev_gest) != 'INV'
+    AND (
+      TRY_CAST(ppd.prev_gest AS INTEGER) IS NULL
+      OR TRY_CAST(ppd.prev_gest AS INTEGER) < 1
+      OR TRY_CAST(ppd.prev_gest AS INTEGER) > 45
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_prev_birth_weight_g AS (
+  -- Missing prev_birth_weight_g
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'prev_birth_weight_g' AS variable,
+    'Missing prev_birth_weight_g' AS issue,
+    ppd.prev_birth_weight_g AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.prev_birth_weight_g IS NULL OR TRIM(ppd.prev_birth_weight_g) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+invalid_prev_birth_weight_g AS (
+  -- prev_birth_weight_g out of range (expected 200-6000 grams)
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'prev_birth_weight_g' AS variable,
+    'prev_birth_weight_g out of range (expected 200-6000 grams)' AS issue,
+    ppd.prev_birth_weight_g AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE ppd.prev_birth_weight_g IS NOT NULL
+    AND TRIM(ppd.prev_birth_weight_g) != ''
+    AND TRIM(ppd.prev_birth_weight_g) != 'NI'
+    AND (
+      TRY_CAST(ppd.prev_birth_weight_g AS INTEGER) IS NULL
+      OR TRY_CAST(ppd.prev_birth_weight_g AS INTEGER) < 200
+      OR TRY_CAST(ppd.prev_birth_weight_g AS INTEGER) > 6000
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+missing_prev_mode_of_delivery AS (
+  -- Missing prev_mode_of_delivery
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'prev_mode_of_delivery' AS variable,
+    'Missing prev_mode_of_delivery' AS issue,
+    ppd.prev_mode_of_delivery AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.prev_mode_of_delivery IS NULL OR TRIM(ppd.prev_mode_of_delivery) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-07-03 11:21:46'
+),
+
+
+missing_prev_outcome AS (
+  -- Missing prev_outcome
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'prev_outcome' AS variable,
+    'Missing prev_outcome' AS issue,
+    ppd.prev_outcome AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.prev_outcome IS NULL OR TRIM(ppd.prev_outcome) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+-- Previous Pregnancy Complications
+missing_is_prev_pet AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_pet' AS variable, 'Missing is_prev_pet' AS issue, ppd.is_prev_pet AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_pet IS NULL OR TRIM(ppd.is_prev_pet) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_aph AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_aph' AS variable, 'Missing is_prev_aph' AS issue, ppd.is_prev_aph AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_aph IS NULL OR TRIM(ppd.is_prev_aph) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_pph AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_pph' AS variable, 'Missing is_prev_pph' AS issue, ppd.is_prev_pph AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_pph IS NULL OR TRIM(ppd.is_prev_pph) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_ur AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_ur' AS variable, 'Missing is_prev_ur' AS issue, ppd.is_prev_ur AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_ur IS NULL OR TRIM(ppd.is_prev_ur) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_ppi AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_ppi' AS variable, 'Missing is_prev_ppi' AS issue, ppd.is_prev_ppi AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_ppi IS NULL OR TRIM(ppd.is_prev_ppi) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_ol AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_ol' AS variable, 'Missing is_prev_ol' AS issue, ppd.is_prev_ol AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_ol IS NULL OR TRIM(ppd.is_prev_ol) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_rp AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_rp' AS variable, 'Missing is_prev_rp' AS issue, ppd.is_prev_rp AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_rp IS NULL OR TRIM(ppd.is_prev_rp) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_mp AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_mp' AS variable, 'Missing is_prev_mp' AS issue, ppd.is_prev_mp AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_mp IS NULL OR TRIM(ppd.is_prev_mp) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_mis AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_mis' AS variable, 'Missing is_prev_mis' AS issue, ppd.is_prev_mis AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_mis IS NULL OR TRIM(ppd.is_prev_mis) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_nbc AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_nbc' AS variable, 'Missing is_prev_nbc' AS issue, ppd.is_prev_nbc AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_nbc IS NULL OR TRIM(ppd.is_prev_nbc) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_end AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_end' AS variable, 'Missing is_prev_end' AS issue, ppd.is_prev_end AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_end IS NULL OR TRIM(ppd.is_prev_end) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_is_prev_oth_complications AS (
+  SELECT mc.record_id, mc.datetime_entry, 'is_prev_oth_complications' AS variable, 'Missing is_prev_oth_complications' AS issue, ppd.is_prev_oth_complications AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.is_prev_oth_complications IS NULL OR TRIM(ppd.is_prev_oth_complications) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+missing_oth_complications AS (
+  -- Missing oth_complications when is_prev_oth_complications = '1'
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'oth_complications' AS variable,
+    'Missing oth_complications (other complications = Yes but no specification)' AS issue,
+    ppd.oth_complications AS current_value
+  FROM maternal_core mc
+  INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
+  WHERE (ppd.oth_complications IS NULL OR TRIM(ppd.oth_complications) = '')
+    AND ppd.is_prev_oth_complications = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+),
+
+
+
+
+
+
 
 
 
@@ -4109,6 +4365,48 @@ missing_is_depression_post_del AS (
     SELECT * FROM missing_is_depression_during_itp
     UNION ALL
     SELECT * FROM missing_is_depression_post_del
+    UNION ALL
+    SELECT * FROM missing_prev_year_of_delivery
+    UNION ALL
+    SELECT * FROM invalid_prev_year_of_delivery
+    UNION ALL
+    SELECT * FROM missing_prev_gest
+    UNION ALL
+    SELECT * FROM invalid_prev_gest
+    UNION ALL
+    SELECT * FROM missing_prev_birth_weight_g
+    UNION ALL
+    SELECT * FROM invalid_prev_birth_weight_g
+    UNION ALL
+    SELECT * FROM missing_prev_mode_of_delivery
+    UNION ALL
+    SELECT * FROM missing_prev_outcome
+    UNION ALL
+    SELECT * FROM missing_is_prev_pet
+    UNION ALL
+    SELECT * FROM missing_is_prev_aph
+    UNION ALL
+    SELECT * FROM missing_is_prev_pph
+    UNION ALL
+    SELECT * FROM missing_is_prev_ur
+    UNION ALL
+    SELECT * FROM missing_is_prev_ppi
+    UNION ALL
+    SELECT * FROM missing_is_prev_ol
+    UNION ALL
+    SELECT * FROM missing_is_prev_rp
+    UNION ALL
+    SELECT * FROM missing_is_prev_mp
+    UNION ALL
+    SELECT * FROM missing_is_prev_mis
+    UNION ALL
+    SELECT * FROM missing_is_prev_nbc
+    UNION ALL
+    SELECT * FROM missing_is_prev_end
+    UNION ALL
+    SELECT * FROM missing_is_prev_oth_complications
+    UNION ALL
+    SELECT * FROM missing_oth_complications
 
 
 

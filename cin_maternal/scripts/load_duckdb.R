@@ -1,69 +1,99 @@
 # ==============================================================================
 # Project: CIN Maternal
-# Script: load_duckdb.R
-# Description: Load processed maternal data into DuckDB
-# Author:
-# Date:
+# Script:  load_duckdb.R
+# Purpose: Load processed maternal CSVs into DuckDB.
+#          One table per CSV; all columns stored as VARCHAR (typing deferred
+#          to downstream DuckDB queries).
 # ==============================================================================
 
+# ------------------------------------------------------------------------------
+# Dependencies
+# ------------------------------------------------------------------------------
 library(here)
 library(duckdb)
 library(DBI)
+library(purrr)
 
 # ------------------------------------------------------------------------------
-# Connect to DuckDB (persistent database)
+# Paths
 # ------------------------------------------------------------------------------
-con <- DBI::dbConnect(
-  duckdb::duckdb(),
-  dbdir = here::here("cin_maternal", "data", "processed", "maternal.duckdb")
-)
-
-# ------------------------------------------------------------------------------
-# Load non-repeating data as maternal_core
-# ------------------------------------------------------------------------------
-DBI::dbExecute(con, "
-  CREATE OR REPLACE TABLE maternal_core AS
-  SELECT * FROM read_csv_auto('cin_maternal/data/processed/non_repeating.csv',
-    all_varchar = true,
-    header = true
-  )
-")
-
-message("Loaded table: maternal_core")
+DUCKDB_PATH   <- here("cin_maternal", "data", "processed", "maternal.duckdb")
+NON_REPEATING <- here("cin_maternal", "data", "processed", "non_repeating.csv")
+REPEATING_DIR <- here("cin_maternal", "data", "processed", "repeating")
 
 # ------------------------------------------------------------------------------
-# Load repeating instruments
+# Helpers
 # ------------------------------------------------------------------------------
-repeating_files <- list.files(
-  here::here("cin_maternal", "data", "processed", "repeating"),
-  pattern = "\\.csv$",
-  full.names = TRUE
-)
 
-for (f in repeating_files) {
-  table_name <- tools::file_path_sans_ext(basename(f))
+#' Log a section header
+log_section <- function(title) {
+  message("\n── ", title, " ", strrep("─", max(0, 60 - nchar(title))))
+}
 
-  DBI::dbExecute(con, sprintf("
-    CREATE OR REPLACE TABLE %s AS
-    SELECT * FROM read_csv_auto('%s',
-      all_varchar = true,
-      header = true
-    )
-  ", table_name, f))
+#' Wrap a table name in double-quotes for safe DuckDB injection
+dq <- function(x) paste0('"', gsub('"', '""', x), '"')
 
-  message("Loaded table: ", table_name)
+#' Load a CSV into DuckDB and return the row count
+load_csv_table <- function(con, table_name, csv_path) {
+  DBI::dbExecute(con, sprintf(
+    "CREATE OR REPLACE TABLE %s AS
+     SELECT * FROM read_csv_auto(%s, all_varchar = true, header = true)",
+    dq(table_name),
+    DBI::dbQuoteString(con, csv_path)
+  ))
+
+  DBI::dbGetQuery(con, sprintf("SELECT COUNT(*) AS n FROM %s", dq(table_name)))$n
 }
 
 # ------------------------------------------------------------------------------
-# Confirm tables loaded
+# Main — wrapped in a function so on.exit() defers correctly
 # ------------------------------------------------------------------------------
-tables <- DBI::dbListTables(con)
-message("\nTables in DuckDB:")
-message(paste(" -", tables, collapse = "\n"))
+run <- function() {
 
-# ------------------------------------------------------------------------------
-# Disconnect
-# ------------------------------------------------------------------------------
-DBI::dbDisconnect(con, shutdown = TRUE)
+  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = DUCKDB_PATH)
+  on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
 
-message("\nDuckDB ready at: cin_maternal/data/processed/maternal.duckdb")
+  # ----------------------------------------------------------------------------
+  # Non-repeating (root) table
+  # ----------------------------------------------------------------------------
+  log_section("Loading non-repeating data")
+
+  n <- load_csv_table(con, "maternal_core", NON_REPEATING)
+  message(sprintf("  maternal_core: %s rows", n))
+
+  # ----------------------------------------------------------------------------
+  # Repeating instrument tables
+  # ----------------------------------------------------------------------------
+  log_section("Loading repeating instruments")
+
+  repeating_files <- list.files(REPEATING_DIR, pattern = "\\.csv$", full.names = TRUE)
+
+  if (length(repeating_files) == 0) {
+    message("  No repeating instrument CSVs found in: ", REPEATING_DIR)
+  } else {
+    purrr::walk(repeating_files, function(path) {
+      name <- tools::file_path_sans_ext(basename(path))
+      n    <- load_csv_table(con, name, path)
+      message(sprintf("  %-45s %s rows", name, n))
+    })
+  }
+
+  # ----------------------------------------------------------------------------
+  # Summary
+  # ----------------------------------------------------------------------------
+  log_section("Tables loaded")
+
+  tables <- DBI::dbListTables(con)
+
+  purrr::walk(sort(tables), function(tbl) {
+    n <- DBI::dbGetQuery(con, sprintf("SELECT COUNT(*) AS n FROM %s", dq(tbl)))$n
+    message(sprintf("  %-45s %s rows", tbl, n))
+  })
+
+  message("\n  Total tables: ", length(tables))
+
+  log_section("Complete")
+  message("  DuckDB: ", DUCKDB_PATH)
+}
+
+run()
