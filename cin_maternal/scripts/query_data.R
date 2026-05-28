@@ -3717,7 +3717,7 @@ missing_is_prev_pet AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_pet IS NULL OR TRIM(ppd.is_prev_pet) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_aph AS (
@@ -3725,7 +3725,7 @@ missing_is_prev_aph AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_aph IS NULL OR TRIM(ppd.is_prev_aph) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_pph AS (
@@ -3733,7 +3733,7 @@ missing_is_prev_pph AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_pph IS NULL OR TRIM(ppd.is_prev_pph) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_ur AS (
@@ -3741,7 +3741,7 @@ missing_is_prev_ur AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_ur IS NULL OR TRIM(ppd.is_prev_ur) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_ppi AS (
@@ -3749,7 +3749,7 @@ missing_is_prev_ppi AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_ppi IS NULL OR TRIM(ppd.is_prev_ppi) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_ol AS (
@@ -3757,7 +3757,7 @@ missing_is_prev_ol AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_ol IS NULL OR TRIM(ppd.is_prev_ol) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_rp AS (
@@ -3765,7 +3765,7 @@ missing_is_prev_rp AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_rp IS NULL OR TRIM(ppd.is_prev_rp) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_mp AS (
@@ -3773,7 +3773,7 @@ missing_is_prev_mp AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_mp IS NULL OR TRIM(ppd.is_prev_mp) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_mis AS (
@@ -3781,7 +3781,7 @@ missing_is_prev_mis AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_mis IS NULL OR TRIM(ppd.is_prev_mis) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_nbc AS (
@@ -3789,7 +3789,7 @@ missing_is_prev_nbc AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_nbc IS NULL OR TRIM(ppd.is_prev_nbc) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_end AS (
@@ -3797,7 +3797,7 @@ missing_is_prev_end AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_end IS NULL OR TRIM(ppd.is_prev_end) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_is_prev_oth_complications AS (
@@ -3805,7 +3805,7 @@ missing_is_prev_oth_complications AS (
   FROM maternal_core mc
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.is_prev_oth_complications IS NULL OR TRIM(ppd.is_prev_oth_complications) = '')
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
 
 missing_oth_complications AS (
@@ -3820,8 +3820,1452 @@ missing_oth_complications AS (
   INNER JOIN previous_pregnancy_details ppd ON mc.record_id = ppd.record_id
   WHERE (ppd.oth_complications IS NULL OR TRIM(ppd.oth_complications) = '')
     AND ppd.is_prev_oth_complications = '1'
-    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-05-02 10:29:25'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
 ),
+
+
+-- Second BP measurements
+missing_second_bp_systolic AS (
+  SELECT record_id, datetime_entry, 'second_bp_systolic' AS variable, 'Missing second_bp_systolic' AS issue, second_bp_systolic AS current_value
+  FROM maternal_core
+  WHERE (second_bp_systolic IS NULL OR TRIM(second_bp_systolic) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_second_bp_systolic AS (
+  SELECT record_id, datetime_entry, 'second_bp_systolic' AS variable, 'second_bp_systolic out of range (expected 70-200 mm Hg)' AS issue, second_bp_systolic AS current_value
+  FROM maternal_core
+  WHERE second_bp_systolic IS NOT NULL
+    AND TRIM(second_bp_systolic) != ''
+    AND TRIM(second_bp_systolic) != 'NI'
+    AND (
+      TRY_CAST(second_bp_systolic AS INTEGER) IS NULL
+      OR TRY_CAST(second_bp_systolic AS INTEGER) < 70
+      OR TRY_CAST(second_bp_systolic AS INTEGER) > 200
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_second_bp_diastolic AS (
+  SELECT record_id, datetime_entry, 'second_bp_diastolic' AS variable, 'Missing second_bp_diastolic' AS issue, second_bp_diastolic AS current_value
+  FROM maternal_core
+  WHERE (second_bp_diastolic IS NULL OR TRIM(second_bp_diastolic) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_second_bp_diastolic AS (
+  SELECT record_id, datetime_entry, 'second_bp_diastolic' AS variable, 'second_bp_diastolic out of range (expected 40-120 mm Hg)' AS issue, second_bp_diastolic AS current_value
+  FROM maternal_core
+  WHERE second_bp_diastolic IS NOT NULL
+    AND TRIM(second_bp_diastolic) != ''
+    AND TRIM(second_bp_diastolic) != 'NI'
+    AND (
+      TRY_CAST(second_bp_diastolic AS INTEGER) IS NULL
+      OR TRY_CAST(second_bp_diastolic AS INTEGER) < 40
+      OR TRY_CAST(second_bp_diastolic AS INTEGER) > 120
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Fundal height
+missing_fundal_height_wks AS (
+  SELECT record_id, datetime_entry, 'fundal_height_wks' AS variable, 'Missing fundal_height_wks' AS issue, fundal_height_wks AS current_value
+  FROM maternal_core
+  WHERE (fundal_height_wks IS NULL OR TRIM(fundal_height_wks) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_fundal_height_wks AS (
+  SELECT record_id, datetime_entry, 'fundal_height_wks' AS variable, 'fundal_height_wks out of range (expected 16-42 weeks)' AS issue, fundal_height_wks AS current_value
+  FROM maternal_core
+  WHERE fundal_height_wks IS NOT NULL
+    AND TRIM(fundal_height_wks) != ''
+    AND TRIM(fundal_height_wks) != 'NI'
+    AND (
+      TRY_CAST(fundal_height_wks AS INTEGER) IS NULL
+      OR TRY_CAST(fundal_height_wks AS INTEGER) < 16
+      OR TRY_CAST(fundal_height_wks AS INTEGER) > 42
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Foetal presentation
+missing_foetal_presentation AS (
+  SELECT record_id, datetime_entry, 'foetal_presentation' AS variable, 'Missing foetal_presentation' AS issue, foetal_presentation AS current_value
+  FROM maternal_core
+  WHERE (foetal_presentation IS NULL OR TRIM(foetal_presentation) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Foetal lie
+missing_foetal_lie AS (
+  SELECT record_id, datetime_entry, 'foetal_lie' AS variable, 'Missing foetal_lie' AS issue, foetal_lie AS current_value
+  FROM maternal_core
+  WHERE (foetal_lie IS NULL OR TRIM(foetal_lie) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Foetal station
+missing_foetal_station AS (
+  SELECT record_id, datetime_entry, 'foetal_station' AS variable, 'Missing foetal_station' AS issue, foetal_station AS current_value
+  FROM maternal_core
+  WHERE (foetal_station IS NULL OR TRIM(foetal_station) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_foetal_station AS (
+  SELECT record_id, datetime_entry, 'foetal_station' AS variable, 'foetal_station out of range (expected 0-5 cm)' AS issue, foetal_station AS current_value
+  FROM maternal_core
+  WHERE foetal_station IS NOT NULL
+    AND TRIM(foetal_station) != ''
+    AND TRIM(foetal_station) != 'NI'
+    AND (
+      TRY_CAST(foetal_station AS INTEGER) IS NULL
+      OR TRY_CAST(foetal_station AS INTEGER) < 0
+      OR TRY_CAST(foetal_station AS INTEGER) > 5
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Foetal descent
+missing_foetal_descent AS (
+  SELECT record_id, datetime_entry, 'foetal_descent' AS variable, 'Missing foetal_descent' AS issue, foetal_descent AS current_value
+  FROM maternal_core
+  WHERE (foetal_descent IS NULL OR TRIM(foetal_descent) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_foetal_descent AS (
+  SELECT record_id, datetime_entry, 'foetal_descent' AS variable, 'foetal_descent out of range (expected 0-5 /5)' AS issue, foetal_descent AS current_value
+  FROM maternal_core
+  WHERE foetal_descent IS NOT NULL
+    AND TRIM(foetal_descent) != ''
+    AND TRIM(foetal_descent) != 'NI'
+    AND (
+      TRY_CAST(foetal_descent AS INTEGER) IS NULL
+      OR TRY_CAST(foetal_descent AS INTEGER) < 0
+      OR TRY_CAST(foetal_descent AS INTEGER) > 5
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- FHR heard
+missing_is_fhr_heard AS (
+  SELECT record_id, datetime_entry, 'is_fhr_heard' AS variable, 'Missing is_fhr_heard' AS issue, is_fhr_heard AS current_value
+  FROM maternal_core
+  WHERE (is_fhr_heard IS NULL OR TRIM(is_fhr_heard) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Twin pregnancy
+missing_is_twin_preg AS (
+  SELECT record_id, datetime_entry, 'is_twin_preg' AS variable, 'Missing is_twin_preg' AS issue, is_twin_preg AS current_value
+  FROM maternal_core
+  WHERE (is_twin_preg IS NULL OR TRIM(is_twin_preg) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- FHR per minute (conditional on is_fhr_heard = '1')
+missing_fhr_heard_per_min AS (
+  SELECT record_id, datetime_entry, 'fhr_heard_per_min' AS variable, 'Missing fhr_heard_per_min (FHR heard = Yes but no rate recorded)' AS issue, fhr_heard_per_min AS current_value
+  FROM maternal_core
+  WHERE (fhr_heard_per_min IS NULL OR TRIM(fhr_heard_per_min) = '')
+    AND is_fhr_heard = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_fhr_heard_per_min AS (
+  SELECT record_id, datetime_entry, 'fhr_heard_per_min' AS variable, 'fhr_heard_per_min out of range (expected 80-200 bpm)' AS issue, fhr_heard_per_min AS current_value
+  FROM maternal_core
+  WHERE fhr_heard_per_min IS NOT NULL
+    AND TRIM(fhr_heard_per_min) != ''
+    AND TRIM(fhr_heard_per_min) != 'NI'
+    AND is_fhr_heard = '1'
+    AND (
+      TRY_CAST(fhr_heard_per_min AS INTEGER) IS NULL
+      OR TRY_CAST(fhr_heard_per_min AS INTEGER) < 80
+      OR TRY_CAST(fhr_heard_per_min AS INTEGER) > 200
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- FHR per minute twin 2 (conditional on is_fhr_heard = '1' AND is_twin_preg = '1')
+missing_fhr_heard_per_min_2 AS (
+  SELECT record_id, datetime_entry, 'fhr_heard_per_min_2' AS variable, 'Missing fhr_heard_per_min_2 (Twin pregnancy & FHR heard but no rate for twin 2 recorded)' AS issue, fhr_heard_per_min_2 AS current_value
+  FROM maternal_core
+  WHERE (fhr_heard_per_min_2 IS NULL OR TRIM(fhr_heard_per_min_2) = '')
+    AND is_fhr_heard = '1'
+    AND is_twin_preg = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_fhr_heard_per_min_2 AS (
+  SELECT record_id, datetime_entry, 'fhr_heard_per_min_2' AS variable, 'fhr_heard_per_min_2 out of range (expected 80-200 bpm)' AS issue, fhr_heard_per_min_2 AS current_value
+  FROM maternal_core
+  WHERE fhr_heard_per_min_2 IS NOT NULL
+    AND TRIM(fhr_heard_per_min_2) != ''
+    AND TRIM(fhr_heard_per_min_2) != 'NI'
+    AND is_fhr_heard = '1'
+    AND is_twin_preg = '1'
+    AND (
+      TRY_CAST(fhr_heard_per_min_2 AS INTEGER) IS NULL
+      OR TRY_CAST(fhr_heard_per_min_2 AS INTEGER) < 80
+      OR TRY_CAST(fhr_heard_per_min_2 AS INTEGER) > 200
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- FHR per minute twin 3 (conditional on is_fhr_heard = '1' AND is_twin_preg = '1')
+missing_fhr_heard_per_min_3 AS (
+  SELECT record_id, datetime_entry, 'fhr_heard_per_min_3' AS variable, 'Missing fhr_heard_per_min_3 (Twin pregnancy & FHR heard but no rate for twin 3 recorded)' AS issue, fhr_heard_per_min_3 AS current_value
+  FROM maternal_core
+  WHERE (fhr_heard_per_min_3 IS NULL OR TRIM(fhr_heard_per_min_3) = '')
+    AND is_fhr_heard = '1'
+    AND is_twin_preg = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_fhr_heard_per_min_3 AS (
+  SELECT record_id, datetime_entry, 'fhr_heard_per_min_3' AS variable, 'fhr_heard_per_min_3 out of range (expected 80-200 bpm)' AS issue, fhr_heard_per_min_3 AS current_value
+  FROM maternal_core
+  WHERE fhr_heard_per_min_3 IS NOT NULL
+    AND TRIM(fhr_heard_per_min_3) != ''
+    AND TRIM(fhr_heard_per_min_3) != 'NI'
+    AND is_fhr_heard = '1'
+    AND is_twin_preg = '1'
+    AND (
+      TRY_CAST(fhr_heard_per_min_3 AS INTEGER) IS NULL
+      OR TRY_CAST(fhr_heard_per_min_3 AS INTEGER) < 80
+      OR TRY_CAST(fhr_heard_per_min_3 AS INTEGER) > 200
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+
+-- Vaginal examination fields
+missing_vaginal_dilatation_cm AS (
+  SELECT record_id, datetime_entry, 'vaginal_dilatation_cm' AS variable, 'Missing vaginal_dilatation_cm' AS issue, vaginal_dilatation_cm AS current_value
+  FROM maternal_core
+  WHERE (vaginal_dilatation_cm IS NULL OR TRIM(vaginal_dilatation_cm) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_vaginal_dilatation_cm AS (
+  SELECT record_id, datetime_entry, 'vaginal_dilatation_cm' AS variable, 'vaginal_dilatation_cm out of range (expected 0-10 cm)' AS issue, vaginal_dilatation_cm AS current_value
+  FROM maternal_core
+  WHERE vaginal_dilatation_cm IS NOT NULL
+    AND TRIM(vaginal_dilatation_cm) != ''
+    AND TRIM(vaginal_dilatation_cm) != 'NI'
+    AND (
+      TRY_CAST(vaginal_dilatation_cm AS INTEGER) IS NULL
+      OR TRY_CAST(vaginal_dilatation_cm AS INTEGER) < 0
+      OR TRY_CAST(vaginal_dilatation_cm AS INTEGER) > 10
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_vaginal_length_cm AS (
+  SELECT record_id, datetime_entry, 'vaginal_length_cm' AS variable, 'Missing vaginal_length_cm' AS issue, vaginal_length_cm AS current_value
+  FROM maternal_core
+  WHERE (vaginal_length_cm IS NULL OR TRIM(vaginal_length_cm) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_vaginal_length_cm AS (
+  SELECT record_id, datetime_entry, 'vaginal_length_cm' AS variable, 'vaginal_length_cm out of range (expected 0-10 cm)' AS issue, vaginal_length_cm AS current_value
+  FROM maternal_core
+  WHERE vaginal_length_cm IS NOT NULL
+    AND TRIM(vaginal_length_cm) != ''
+    AND TRIM(vaginal_length_cm) != 'NI'
+    AND (
+      TRY_CAST(vaginal_length_cm AS INTEGER) IS NULL
+      OR TRY_CAST(vaginal_length_cm AS INTEGER) < 0
+      OR TRY_CAST(vaginal_length_cm AS INTEGER) > 10
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_cervical_consistency AS (
+  SELECT record_id, datetime_entry, 'cervical_consistency' AS variable, 'Missing cervical_consistency' AS issue, cervical_consistency AS current_value
+  FROM maternal_core
+  WHERE (cervical_consistency IS NULL OR TRIM(cervical_consistency) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+--missing_cervical_consistency_oth AS (
+--  SELECT record_id, datetime_entry, 'cervical_consistency_oth' AS variable, 'Missing cervical_consistency_oth (cervical consistency = Other but no specification)' AS issue, cervical_consistency_oth AS current_value
+--  FROM maternal_core
+--  WHERE (cervical_consistency_oth IS NULL OR TRIM(cervical_consistency_oth) = '')
+--    AND cervical_consistency = 'OTH'
+--    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+-- ),
+
+missing_cervical_position AS (
+  SELECT record_id, datetime_entry, 'cervical_position' AS variable, 'Missing cervical_position' AS issue, cervical_position AS current_value
+  FROM maternal_core
+  WHERE (cervical_position IS NULL OR TRIM(cervical_position) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Uterine scars section
+missing_is_uterine_scar AS (
+  SELECT record_id, datetime_entry, 'is_uterine_scar' AS variable, 'Missing is_uterine_scar' AS issue, is_uterine_scar AS current_value
+  FROM maternal_core
+  WHERE (is_uterine_scar IS NULL OR TRIM(is_uterine_scar) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_uterine_scar_specify AS (
+  SELECT record_id, datetime_entry, 'uterine_scar_specify' AS variable, 'Missing uterine_scar_specify (uterine scar = Yes but no specification)' AS issue, uterine_scar_specify AS current_value
+  FROM maternal_core
+  WHERE (uterine_scar_specify IS NULL OR TRIM(uterine_scar_specify) = '')
+    AND is_uterine_scar = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_uterine_scar_specify_oth AS (
+  SELECT record_id, datetime_entry, 'uterine_scar_specify_oth' AS variable, 'Missing uterine_scar_specify_oth (uterine scar specify = Other but no specification)' AS issue, uterine_scar_specify_oth AS current_value
+  FROM maternal_core
+  WHERE (uterine_scar_specify_oth IS NULL OR TRIM(uterine_scar_specify_oth) = '')
+    AND uterine_scar_specify = 'OTH'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_count_uterine_scar AS (
+  SELECT record_id, datetime_entry, 'count_uterine_scar' AS variable, 'Missing count_uterine_scar (uterine scar = Yes but no count recorded)' AS issue, count_uterine_scar AS current_value
+  FROM maternal_core
+  WHERE (count_uterine_scar IS NULL OR TRIM(count_uterine_scar) = '')
+    AND is_uterine_scar = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_count_uterine_scar AS (
+  SELECT record_id, datetime_entry, 'count_uterine_scar' AS variable, 'count_uterine_scar out of range (expected 1-10)' AS issue, count_uterine_scar AS current_value
+  FROM maternal_core
+  WHERE count_uterine_scar IS NOT NULL
+    AND TRIM(count_uterine_scar) != ''
+    AND TRIM(count_uterine_scar) != 'NI'
+    AND is_uterine_scar = '1'
+    AND (
+      TRY_CAST(count_uterine_scar AS INTEGER) IS NULL
+      OR TRY_CAST(count_uterine_scar AS INTEGER) < 1
+      OR TRY_CAST(count_uterine_scar AS INTEGER) > 10
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- ROM section
+missing_is_rom_at_adm AS (
+  SELECT record_id, datetime_entry, 'is_rom_at_adm' AS variable, 'Missing is_rom_at_adm' AS issue, is_rom_at_adm AS current_value
+  FROM maternal_core
+  WHERE (is_rom_at_adm IS NULL OR TRIM(is_rom_at_adm) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_rom_duration_value AS (
+  SELECT record_id, datetime_entry, 'rom_duration_value' AS variable, 'Missing rom_duration_value (ROM at admission = Yes but no duration recorded)' AS issue, rom_duration_value AS current_value
+  FROM maternal_core
+  WHERE (rom_duration_value IS NULL OR TRIM(rom_duration_value) = '')
+    AND is_rom_at_adm = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_rom_duration_value AS (
+  SELECT record_id, datetime_entry, 'rom_duration_value' AS variable, 'rom_duration_value out of range (expected 0-720 hours or 0-30 days)' AS issue, rom_duration_value AS current_value
+  FROM maternal_core
+  WHERE rom_duration_value IS NOT NULL
+    AND TRIM(rom_duration_value) != ''
+    AND TRIM(rom_duration_value) != 'NI'
+    AND is_rom_at_adm = '1'
+    AND TRY_CAST(rom_duration_value AS INTEGER) IS NULL
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_rom_duration_unit AS (
+  SELECT record_id, datetime_entry, 'rom_duration_unit' AS variable, 'Missing rom_duration_unit (ROM duration recorded but no unit specified)' AS issue, rom_duration_unit AS current_value
+  FROM maternal_core
+  WHERE (rom_duration_unit IS NULL OR TRIM(rom_duration_unit) = '')
+    AND is_rom_at_adm = '1'
+    AND rom_duration_value IS NOT NULL
+    AND TRIM(rom_duration_value) != ''
+    AND TRIM(rom_duration_value) != 'NI'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Liquor section
+missing_is_liquor_clear AS (
+  SELECT record_id, datetime_entry, 'is_liquor_clear' AS variable, 'Missing is_liquor_clear' AS issue, is_liquor_clear AS current_value
+  FROM maternal_core
+  WHERE (is_liquor_clear IS NULL OR TRIM(is_liquor_clear) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_liquor_offensive AS (
+  SELECT record_id, datetime_entry, 'is_liquor_offensive' AS variable, 'Missing is_liquor_offensive' AS issue, is_liquor_offensive AS current_value
+  FROM maternal_core
+  WHERE (is_liquor_offensive IS NULL OR TRIM(is_liquor_offensive) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_meconium_present AS (
+  SELECT record_id, datetime_entry, 'is_meconium_present' AS variable, 'Missing is_meconium_present' AS issue, is_meconium_present AS current_value
+  FROM maternal_core
+  WHERE (is_meconium_present IS NULL OR TRIM(is_meconium_present) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_meconium_grade AS (
+  SELECT record_id, datetime_entry, 'meconium_grade' AS variable, 'Missing meconium_grade (Meconium present = Yes but no grade recorded)' AS issue, meconium_grade AS current_value
+  FROM maternal_core
+  WHERE (meconium_grade IS NULL OR TRIM(meconium_grade) = '')
+    AND is_meconium_present = '1'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Physical examination
+missing_is_adm_physical_exam AS (
+  SELECT record_id, datetime_entry, 'is_adm_physical_exam' AS variable, 'Missing is_adm_physical_exam' AS issue, is_adm_physical_exam AS current_value
+  FROM maternal_core
+  WHERE (is_adm_physical_exam IS NULL OR TRIM(is_adm_physical_exam) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+
+-- Stage of labour at admission
+missing_adm_stage_labour AS (
+  SELECT record_id, datetime_entry, 'adm_stage_labour' AS variable, 'Missing adm_stage_labour' AS issue, adm_stage_labour AS current_value
+  FROM maternal_core
+  WHERE (adm_stage_labour IS NULL OR TRIM(adm_stage_labour) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Admitting clinician name
+missing_admitting_clinician_name AS (
+  SELECT record_id, datetime_entry, 'admitting_clinician_name' AS variable, 'Missing admitting_clinician_name' AS issue, admitting_clinician_name AS current_value
+  FROM maternal_core
+  WHERE (admitting_clinician_name IS NULL OR TRIM(admitting_clinician_name) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Date signing admitting clinician
+missing_date_sign_admitting_clin AS (
+  SELECT record_id, datetime_entry, 'date_sign_admitting_clin' AS variable, 'Missing date_sign_admitting_clin' AS issue, date_sign_admitting_clin AS current_value
+  FROM maternal_core
+  WHERE (date_sign_admitting_clin IS NULL OR TRIM(date_sign_admitting_clin) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+future_date_sign_admitting_clin AS (
+  SELECT record_id, datetime_entry, 'date_sign_admitting_clin' AS variable, 'Future date_sign_admitting_clin' AS issue, date_sign_admitting_clin AS current_value
+  FROM maternal_core
+  WHERE date_sign_admitting_clin IS NOT NULL
+    AND TRIM(date_sign_admitting_clin) != ''
+    AND TRY_CAST(date_sign_admitting_clin AS DATE) > CURRENT_DATE
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Time signing admitting clinician
+missing_time_sign_adm_clinician AS (
+  SELECT record_id, datetime_entry, 'time_sign_adm_clinician' AS variable, 'Missing time_sign_adm_clinician' AS issue, time_sign_adm_clinician AS current_value
+  FROM maternal_core
+  WHERE (time_sign_adm_clinician IS NULL OR TRIM(time_sign_adm_clinician) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_time_sign_adm_clinician AS (
+  SELECT record_id, datetime_entry, 'time_sign_adm_clinician' AS variable, 'Invalid time_sign_adm_clinician format (expected HH:MM 12hr or 24hr)' AS issue, time_sign_adm_clinician AS current_value
+  FROM maternal_core
+  WHERE time_sign_adm_clinician IS NOT NULL
+    AND TRIM(time_sign_adm_clinician) != ''
+    AND TRIM(time_sign_adm_clinician) != 'NI'
+    AND NOT (
+      regexp_matches(TRIM(time_sign_adm_clinician), '^(0?[1-9]|1[0-2]):[0-5][0-9]$')
+      OR
+      regexp_matches(TRIM(time_sign_adm_clinician), '^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+    )
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- AM/PM unit for admitting clinician time (only when time_sign_adm_clinician is present and not NI)
+missing_adm_clin_sign_time AS (
+  SELECT record_id, datetime_entry, 'adm_clin_sign_time' AS variable, 'Missing adm_clin_sign_time' AS issue, adm_clin_sign_time AS current_value
+  FROM maternal_core
+  WHERE (adm_clin_sign_time IS NULL OR TRIM(adm_clin_sign_time) = '')
+    AND time_sign_adm_clinician IS NOT NULL
+    AND TRIM(time_sign_adm_clinician) != ''
+    AND TRIM(time_sign_adm_clinician) != 'NI'
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Monitoring chart present and filled
+missing_is_monitoring_chart AS (
+  SELECT record_id, datetime_entry, 'is_monitoring_chart' AS variable, 'Missing is_monitoring_chart' AS issue, is_monitoring_chart AS current_value
+  FROM maternal_core
+  WHERE (is_monitoring_chart IS NULL OR TRIM(is_monitoring_chart) = '')
+    AND CAST(datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+
+-- Labour monitoring fields (from labour_and_delivery_monitoring table)
+missing_lbr_monitoring_date AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_monitoring_date' AS variable,
+    'Missing lbr_monitoring_date' AS issue,
+    ldm.lbr_monitoring_date AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_monitoring_date IS NULL OR TRIM(ldm.lbr_monitoring_date) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+future_lbr_monitoring_date AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_monitoring_date' AS variable,
+    'Future lbr_monitoring_date' AS issue,
+    ldm.lbr_monitoring_date AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_monitoring_date IS NOT NULL
+    AND TRIM(ldm.lbr_monitoring_date) != ''
+    AND TRY_CAST(ldm.lbr_monitoring_date AS DATE) > CURRENT_DATE
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_monitoring_time AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_monitoring_time' AS variable,
+    'Missing lbr_monitoring_time' AS issue,
+    ldm.lbr_monitoring_time AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_monitoring_time IS NULL OR TRIM(ldm.lbr_monitoring_time) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_monitoring_time AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_monitoring_time' AS variable,
+    'Invalid lbr_monitoring_time format (expected HH:MM 12hr or 24hr)' AS issue,
+    ldm.lbr_monitoring_time AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_monitoring_time IS NOT NULL
+    AND TRIM(ldm.lbr_monitoring_time) != ''
+    AND TRIM(ldm.lbr_monitoring_time) != 'NI'
+    AND NOT (
+      regexp_matches(TRIM(ldm.lbr_monitoring_time), '^(0?[1-9]|1[0-2]):[0-5][0-9]$')
+      OR
+      regexp_matches(TRIM(ldm.lbr_monitoring_time), '^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_monitoring_time_unit AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_monitoring_time_unit' AS variable,
+    'Missing lbr_monitoring_time_unit' AS issue,
+    ldm.lbr_monitoring_time_unit AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_monitoring_time_unit IS NULL OR TRIM(ldm.lbr_monitoring_time_unit) = '')
+    AND ldm.lbr_monitoring_time IS NOT NULL
+    AND TRIM(ldm.lbr_monitoring_time) != ''
+    AND TRIM(ldm.lbr_monitoring_time) != 'NI'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_monitoring_clinician_name AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'monitoring_clinician_name' AS variable,
+    'Missing monitoring_clinician_name' AS issue,
+    ldm.monitoring_clinician_name AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.monitoring_clinician_name IS NULL OR TRIM(ldm.monitoring_clinician_name) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Labour vitals
+missing_lbr_bp_systolic AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_bp_systolic' AS variable,
+    'Missing lbr_bp_systolic' AS issue,
+    ldm.lbr_bp_systolic AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_bp_systolic IS NULL OR TRIM(ldm.lbr_bp_systolic) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_bp_systolic AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_bp_systolic' AS variable,
+    'lbr_bp_systolic out of range (expected 50-200 mm Hg)' AS issue,
+    ldm.lbr_bp_systolic AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_bp_systolic IS NOT NULL
+    AND TRIM(ldm.lbr_bp_systolic) != ''
+    AND TRIM(ldm.lbr_bp_systolic) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_bp_systolic AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_bp_systolic AS INTEGER) < 50
+      OR TRY_CAST(ldm.lbr_bp_systolic AS INTEGER) > 200
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_bp_diastolic AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_bp_diastolic' AS variable,
+    'Missing lbr_bp_diastolic' AS issue,
+    ldm.lbr_bp_diastolic AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_bp_diastolic IS NULL OR TRIM(ldm.lbr_bp_diastolic) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_bp_diastolic AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_bp_diastolic' AS variable,
+    'lbr_bp_diastolic out of range (expected 30-120 mm Hg)' AS issue,
+    ldm.lbr_bp_diastolic AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_bp_diastolic IS NOT NULL
+    AND TRIM(ldm.lbr_bp_diastolic) != ''
+    AND TRIM(ldm.lbr_bp_diastolic) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_bp_diastolic AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_bp_diastolic AS INTEGER) < 30
+      OR TRY_CAST(ldm.lbr_bp_diastolic AS INTEGER) > 120
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_spo AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_spo' AS variable,
+    'Missing lbr_spo' AS issue,
+    ldm.lbr_spo AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_spo IS NULL OR TRIM(ldm.lbr_spo) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_spo AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_spo' AS variable,
+    'lbr_spo out of range (expected 50-100 %)' AS issue,
+    ldm.lbr_spo AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_spo IS NOT NULL
+    AND TRIM(ldm.lbr_spo) != ''
+    AND TRIM(ldm.lbr_spo) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_spo AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_spo AS INTEGER) < 50
+      OR TRY_CAST(ldm.lbr_spo AS INTEGER) > 100
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_resp_rate AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_resp_rate' AS variable,
+    'Missing lbr_resp_rate' AS issue,
+    ldm.lbr_resp_rate AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_resp_rate IS NULL OR TRIM(ldm.lbr_resp_rate) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_resp_rate AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_resp_rate' AS variable,
+    'lbr_resp_rate out of range (expected 8-40 bpm)' AS issue,
+    ldm.lbr_resp_rate AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_resp_rate IS NOT NULL
+    AND TRIM(ldm.lbr_resp_rate) != ''
+    AND TRIM(ldm.lbr_resp_rate) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_resp_rate AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_resp_rate AS INTEGER) < 8
+      OR TRY_CAST(ldm.lbr_resp_rate AS INTEGER) > 40
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_temp AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_temp' AS variable,
+    'Missing lbr_temp' AS issue,
+    ldm.lbr_temp AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_temp IS NULL OR TRIM(ldm.lbr_temp) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_temp AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_temp' AS variable,
+    'lbr_temp out of range (expected 30-45 °C)' AS issue,
+    ldm.lbr_temp AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_temp IS NOT NULL
+    AND TRIM(ldm.lbr_temp) != ''
+    AND TRIM(ldm.lbr_temp) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_temp AS DOUBLE) IS NULL
+      OR TRY_CAST(ldm.lbr_temp AS DOUBLE) < 30
+      OR TRY_CAST(ldm.lbr_temp AS DOUBLE) > 45
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_heart_rate AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_heart_rate' AS variable,
+    'Missing lbr_heart_rate' AS issue,
+    ldm.lbr_heart_rate AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_heart_rate IS NULL OR TRIM(ldm.lbr_heart_rate) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_heart_rate AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_heart_rate' AS variable,
+    'lbr_heart_rate out of range (expected 40-200 bpm)' AS issue,
+    ldm.lbr_heart_rate AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_heart_rate IS NOT NULL
+    AND TRIM(ldm.lbr_heart_rate) != ''
+    AND TRIM(ldm.lbr_heart_rate) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_heart_rate AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_heart_rate AS INTEGER) < 40
+      OR TRY_CAST(ldm.lbr_heart_rate AS INTEGER) > 200
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- FHR monitoring
+missing_lbr_fhr_monitoring_method AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_fhr_monitoring_method' AS variable,
+    'Missing lbr_fhr_monitoring_method' AS issue,
+    ldm.lbr_fhr_monitoring_method AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_fhr_monitoring_method IS NULL OR TRIM(ldm.lbr_fhr_monitoring_method) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_fhr_present AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_fhr_present' AS variable,
+    'Missing is_lbr_fhr_present' AS issue,
+    ldm.is_lbr_fhr_present AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_fhr_present IS NULL OR TRIM(ldm.is_lbr_fhr_present) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_fhr_regularity AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_fhr_regularity' AS variable,
+    'Missing lbr_fhr_regularity (FHR present = Yes but regularity not recorded)' AS issue,
+    ldm.lbr_fhr_regularity AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_fhr_regularity IS NULL OR TRIM(ldm.lbr_fhr_regularity) = '')
+    AND ldm.is_lbr_fhr_present = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_twin_preg AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_twin_preg' AS variable,
+    'Missing is_lbr_twin_preg' AS issue,
+    ldm.is_lbr_twin_preg AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_twin_preg IS NULL OR TRIM(ldm.is_lbr_twin_preg) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_fhr_bpm AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_fhr_bpm' AS variable,
+    'Missing lbr_fhr_bpm (FHR present = Yes but no rate recorded)' AS issue,
+    ldm.lbr_fhr_bpm AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_fhr_bpm IS NULL OR TRIM(ldm.lbr_fhr_bpm) = '')
+    AND ldm.is_lbr_fhr_present = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_fhr_bpm AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_fhr_bpm' AS variable,
+    'lbr_fhr_bpm out of range (expected 80-200 bpm)' AS issue,
+    ldm.lbr_fhr_bpm AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_fhr_bpm IS NOT NULL
+    AND TRIM(ldm.lbr_fhr_bpm) != ''
+    AND TRIM(ldm.lbr_fhr_bpm) != 'NI'
+    AND ldm.is_lbr_fhr_present = '1'
+    AND (
+      TRY_CAST(ldm.lbr_fhr_bpm AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_fhr_bpm AS INTEGER) < 80
+      OR TRY_CAST(ldm.lbr_fhr_bpm AS INTEGER) > 200
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_fhr_bpm_2 AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_fhr_bpm_2' AS variable,
+    'Missing lbr_fhr_bpm_2 (Twin pregnancy & FHR present but no rate for twin 2 recorded)' AS issue,
+    ldm.lbr_fhr_bpm_2 AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_fhr_bpm_2 IS NULL OR TRIM(ldm.lbr_fhr_bpm_2) = '')
+    AND ldm.is_lbr_fhr_present = '1'
+    AND ldm.is_lbr_twin_preg = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_fhr_bpm_2 AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_fhr_bpm_2' AS variable,
+    'lbr_fhr_bpm_2 out of range (expected 80-200 bpm)' AS issue,
+    ldm.lbr_fhr_bpm_2 AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_fhr_bpm_2 IS NOT NULL
+    AND TRIM(ldm.lbr_fhr_bpm_2) != ''
+    AND TRIM(ldm.lbr_fhr_bpm_2) != 'NI'
+    AND ldm.is_lbr_fhr_present = '1'
+    AND ldm.is_lbr_twin_preg = '1'
+    AND (
+      TRY_CAST(ldm.lbr_fhr_bpm_2 AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_fhr_bpm_2 AS INTEGER) < 80
+      OR TRY_CAST(ldm.lbr_fhr_bpm_2 AS INTEGER) > 200
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_fhr_bpm_3 AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_fhr_bpm_3' AS variable,
+    'Missing lbr_fhr_bpm_3 (Twin pregnancy & FHR present but no rate for twin 3 recorded)' AS issue,
+    ldm.lbr_fhr_bpm_3 AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_fhr_bpm_3 IS NULL OR TRIM(ldm.lbr_fhr_bpm_3) = '')
+    AND ldm.is_lbr_fhr_present = '1'
+    AND ldm.is_lbr_twin_preg = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_fhr_bpm_3 AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_fhr_bpm_3' AS variable,
+    'lbr_fhr_bpm_3 out of range (expected 80-200 bpm)' AS issue,
+    ldm.lbr_fhr_bpm_3 AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_fhr_bpm_3 IS NOT NULL
+    AND TRIM(ldm.lbr_fhr_bpm_3) != ''
+    AND TRIM(ldm.lbr_fhr_bpm_3) != 'NI'
+    AND ldm.is_lbr_fhr_present = '1'
+    AND ldm.is_lbr_twin_preg = '1'
+    AND (
+      TRY_CAST(ldm.lbr_fhr_bpm_3 AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_fhr_bpm_3 AS INTEGER) < 80
+      OR TRY_CAST(ldm.lbr_fhr_bpm_3 AS INTEGER) > 200
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+
+-- Abdominal exam fields
+missing_lbr_foetal_presentation AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_foetal_presentation' AS variable,
+    'Missing lbr_foetal_presentation' AS issue,
+    ldm.lbr_foetal_presentation AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_foetal_presentation IS NULL OR TRIM(ldm.lbr_foetal_presentation) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_foetal_lie AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_foetal_lie' AS variable,
+    'Missing lbr_foetal_lie' AS issue,
+    ldm.lbr_foetal_lie AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_foetal_lie IS NULL OR TRIM(ldm.lbr_foetal_lie) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_foetal_station AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_foetal_station' AS variable,
+    'Missing lbr_foetal_station' AS issue,
+    ldm.lbr_foetal_station AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_foetal_station IS NULL OR TRIM(ldm.lbr_foetal_station) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_foetal_station AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_foetal_station' AS variable,
+    'lbr_foetal_station out of range (expected 0-5 cm)' AS issue,
+    ldm.lbr_foetal_station AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_foetal_station IS NOT NULL
+    AND TRIM(ldm.lbr_foetal_station) != ''
+    AND TRIM(ldm.lbr_foetal_station) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_foetal_station AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_foetal_station AS INTEGER) < 0
+      OR TRY_CAST(ldm.lbr_foetal_station AS INTEGER) > 5
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_foetal_descent AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_foetal_descent' AS variable,
+    'Missing lbr_foetal_descent' AS issue,
+    ldm.lbr_foetal_descent AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_foetal_descent IS NULL OR TRIM(ldm.lbr_foetal_descent) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_foetal_descent AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_foetal_descent' AS variable,
+    'lbr_foetal_descent out of range (expected 0-5 /5)' AS issue,
+    ldm.lbr_foetal_descent AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_foetal_descent IS NOT NULL
+    AND TRIM(ldm.lbr_foetal_descent) != ''
+    AND TRIM(ldm.lbr_foetal_descent) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_foetal_descent AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_foetal_descent AS INTEGER) < 0
+      OR TRY_CAST(ldm.lbr_foetal_descent AS INTEGER) > 5
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_contractions AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_contractions' AS variable,
+    'Missing is_lbr_contractions' AS issue,
+    ldm.is_lbr_contractions AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_contractions IS NULL OR TRIM(ldm.is_lbr_contractions) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Vaginal exam fields
+missing_lbr_vaginal_dilatation_cm AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_vaginal_dilatation_cm' AS variable,
+    'Missing lbr_vaginal_dilatation_cm' AS issue,
+    ldm.lbr_vaginal_dilatation_cm AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_vaginal_dilatation_cm IS NULL OR TRIM(ldm.lbr_vaginal_dilatation_cm) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_vaginal_dilatation_cm AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_vaginal_dilatation_cm' AS variable,
+    'lbr_vaginal_dilatation_cm out of range (expected 0-10 cm)' AS issue,
+    ldm.lbr_vaginal_dilatation_cm AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_vaginal_dilatation_cm IS NOT NULL
+    AND TRIM(ldm.lbr_vaginal_dilatation_cm) != ''
+    AND TRIM(ldm.lbr_vaginal_dilatation_cm) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_vaginal_dilatation_cm AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_vaginal_dilatation_cm AS INTEGER) < 0
+      OR TRY_CAST(ldm.lbr_vaginal_dilatation_cm AS INTEGER) > 10
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_vaginal_length_cm AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_vaginal_length_cm' AS variable,
+    'Missing lbr_vaginal_length_cm' AS issue,
+    ldm.lbr_vaginal_length_cm AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_vaginal_length_cm IS NULL OR TRIM(ldm.lbr_vaginal_length_cm) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+invalid_lbr_vaginal_length_cm AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_vaginal_length_cm' AS variable,
+    'lbr_vaginal_length_cm out of range (expected 0-10 cm)' AS issue,
+    ldm.lbr_vaginal_length_cm AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE ldm.lbr_vaginal_length_cm IS NOT NULL
+    AND TRIM(ldm.lbr_vaginal_length_cm) != ''
+    AND TRIM(ldm.lbr_vaginal_length_cm) != 'NI'
+    AND (
+      TRY_CAST(ldm.lbr_vaginal_length_cm AS INTEGER) IS NULL
+      OR TRY_CAST(ldm.lbr_vaginal_length_cm AS INTEGER) < 0
+      OR TRY_CAST(ldm.lbr_vaginal_length_cm AS INTEGER) > 10
+    )
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_cervical_consistency_lbr AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'cervical_consistency_lbr' AS variable,
+    'Missing cervical_consistency_lbr' AS issue,
+    ldm.cervical_consistency_lbr AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.cervical_consistency_lbr IS NULL OR TRIM(ldm.cervical_consistency_lbr) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- missing_cervical_consistcy_lb_oth AS (
+ -- SELECT
+  --  mc.record_id,
+  --  mc.datetime_entry,
+  --  'cervical_consistcy_lb_oth' AS variable,
+  --  'Missing cervical_consistcy_lb_oth (cervical consistency = Other but no specification)' AS issue,
+ --   ldm.cervical_consistcy_lb_oth AS current_value
+ -- FROM maternal_core mc
+  -- INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  -- WHERE (ldm.cervical_consistcy_lb_oth IS NULL OR TRIM(ldm.cervical_consistcy_lb_oth) = '')
+    -- AND ldm.cervical_consistency_lbr = 'OTH'
+   -- AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+-- ),
+
+missing_cervical_position_lbr AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'cervical_position_lbr' AS variable,
+    'Missing cervical_position_lbr' AS issue,
+    ldm.cervical_position_lbr AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.cervical_position_lbr IS NULL OR TRIM(ldm.cervical_position_lbr) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_vaginal_discharge AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_vaginal_discharge' AS variable,
+    'Missing is_lbr_vaginal_discharge' AS issue,
+    ldm.is_lbr_vaginal_discharge AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_vaginal_discharge IS NULL OR TRIM(ldm.is_lbr_vaginal_discharge) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_vaginal_disch_type AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_vaginal_disch_type' AS variable,
+    'Missing lbr_vaginal_disch_type (vaginal discharge = Yes but no type recorded)' AS issue,
+    ldm.lbr_vaginal_disch_type AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_vaginal_disch_type IS NULL OR TRIM(ldm.lbr_vaginal_disch_type) = '')
+    AND ldm.is_lbr_vaginal_discharge = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_discharge_oth AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_discharge_oth' AS variable,
+    'Missing lbr_discharge_oth (discharge type = Other but no specification)' AS issue,
+    ldm.lbr_discharge_oth AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_discharge_oth IS NULL OR TRIM(ldm.lbr_discharge_oth) = '')
+    AND ldm.lbr_vaginal_disch_type = 'OTH'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_liquor_clear AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_liquor_clear' AS variable,
+    'Missing is_lbr_liquor_clear' AS issue,
+    ldm.is_lbr_liquor_clear AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_liquor_clear IS NULL OR TRIM(ldm.is_lbr_liquor_clear) = '')
+    AND ldm.lbr_vaginal_disch_type = '2'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_msl AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_msl' AS variable,
+    'Missing is_lbr_msl' AS issue,
+    ldm.is_lbr_msl AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_msl IS NULL OR TRIM(ldm.is_lbr_msl) = '')
+    AND ldm.lbr_vaginal_disch_type = '2'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_msl_grade AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_msl_grade' AS variable,
+    'Missing lbr_msl_grade (MSL = Yes but no grade recorded)' AS issue,
+    ldm.lbr_msl_grade AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_msl_grade IS NULL OR TRIM(ldm.lbr_msl_grade) = '')
+    AND ldm.is_lbr_msl = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_liq_smelling AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_liq_smelling' AS variable,
+    'Missing is_lbr_liq_smelling' AS issue,
+    ldm.is_lbr_liq_smelling AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_liq_smelling IS NULL OR TRIM(ldm.is_lbr_liq_smelling) = '')
+    AND ldm.lbr_vaginal_disch_type = '2'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_stage_labour AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_stage_labour' AS variable,
+    'Missing lbr_stage_labour' AS issue,
+    ldm.lbr_stage_labour AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_stage_labour IS NULL OR TRIM(ldm.lbr_stage_labour) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+-- Interventions
+missing_is_lbr_arm_performed AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_arm_performed' AS variable,
+    'Missing is_lbr_arm_performed' AS issue,
+    ldm.is_lbr_arm_performed AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_arm_performed IS NULL OR TRIM(ldm.is_lbr_arm_performed) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_augmented AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_augmented' AS variable,
+    'Missing is_lbr_augmented' AS issue,
+    ldm.is_lbr_augmented AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_augmented IS NULL OR TRIM(ldm.is_lbr_augmented) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_aug_oxitocin AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_aug_oxitocin' AS variable,
+    'Missing is_lbr_aug_oxitocin (Labour augmented = Yes but oxytocin status not recorded)' AS issue,
+    ldm.is_lbr_aug_oxitocin AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_aug_oxitocin IS NULL OR TRIM(ldm.is_lbr_aug_oxitocin) = '')
+    AND ldm.is_lbr_augmented = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_lbr_induced AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_lbr_induced' AS variable,
+    'Missing is_lbr_induced' AS issue,
+    ldm.is_lbr_induced AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_lbr_induced IS NULL OR TRIM(ldm.is_lbr_induced) = '')
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_induction_type AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_induction_type' AS variable,
+    'Missing lbr_induction_type (Labour induction = Yes but no induction type recorded)' AS issue,
+    ldm.lbr_induction_type AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_induction_type IS NULL OR TRIM(ldm.lbr_induction_type) = '')
+    AND ldm.is_lbr_induced = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_misoprostol_lbr AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_misoprostol_lbr' AS variable,
+    'Missing is_misoprostol_lbr (Induction type = Prostaglandin but misoprostol status not recorded)' AS issue,
+    ldm.is_misoprostol_lbr AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_misoprostol_lbr IS NULL OR TRIM(ldm.is_misoprostol_lbr) = '')
+    AND ldm.lbr_induction_type = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_misoprostol_lbr_route AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'misoprostol_lbr_route' AS variable,
+    'Missing misoprostol_lbr_route (Misoprostol = Yes but route not recorded)' AS issue,
+    ldm.misoprostol_lbr_route AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.misoprostol_lbr_route IS NULL OR TRIM(ldm.misoprostol_lbr_route) = '')
+    AND ldm.is_misoprostol_lbr = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_glandin_lbr AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_glandin_lbr' AS variable,
+    'Missing is_glandin_lbr (Induction type = Prostaglandin but glandin status not recorded)' AS issue,
+    ldm.is_glandin_lbr AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_glandin_lbr IS NULL OR TRIM(ldm.is_glandin_lbr) = '')
+    AND ldm.lbr_induction_type = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_glandin_lbr_route AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'glandin_lbr_route' AS variable,
+    'Missing glandin_lbr_route (Glandin = Yes but route not recorded)' AS issue,
+    ldm.glandin_lbr_route AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.glandin_lbr_route IS NULL OR TRIM(ldm.glandin_lbr_route) = '')
+    AND ldm.is_glandin_lbr = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_is_vagiprost_lbr AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'is_vagiprost_lbr' AS variable,
+    'Missing is_vagiprost_lbr (Induction type = Prostaglandin but vagiprost status not recorded)' AS issue,
+    ldm.is_vagiprost_lbr AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.is_vagiprost_lbr IS NULL OR TRIM(ldm.is_vagiprost_lbr) = '')
+    AND ldm.lbr_induction_type = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_vagiprost_lbr_route AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'vagiprost_lbr_route' AS variable,
+    'Missing vagiprost_lbr_route (Vagiprost = Yes but route not recorded)' AS issue,
+    ldm.vagiprost_lbr_route AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.vagiprost_lbr_route IS NULL OR TRIM(ldm.vagiprost_lbr_route) = '')
+    AND ldm.is_vagiprost_lbr = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_induction_uterotonics AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_induction_uterotonics' AS variable,
+    'Missing lbr_induction_uterotonics (Labour induction = Yes but uterotonics type not recorded)' AS issue,
+    ldm.lbr_induction_uterotonics AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_induction_uterotonics IS NULL OR TRIM(ldm.lbr_induction_uterotonics) = '')
+    AND ldm.is_lbr_induced = '1'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+missing_lbr_inductn_uterotonc_oth AS (
+  SELECT
+    mc.record_id,
+    mc.datetime_entry,
+    'lbr_inductn_uterotonc_oth' AS variable,
+    'Missing lbr_inductn_uterotonc_oth (Uterotonics = Other but no specification)' AS issue,
+    ldm.lbr_inductn_uterotonc_oth AS current_value
+  FROM maternal_core mc
+  INNER JOIN labour_and_delivery_monitoring ldm ON mc.record_id = ldm.record_id
+  WHERE (ldm.lbr_inductn_uterotonc_oth IS NULL OR TRIM(ldm.lbr_inductn_uterotonc_oth) = '')
+    AND ldm.lbr_induction_uterotonics = 'OTH'
+    AND CAST(mc.datetime_entry AS TIMESTAMP) >= '2025-09-08 08:00:00'
+),
+
+
+
+
 
 
 
@@ -4407,6 +5851,230 @@ missing_oth_complications AS (
     SELECT * FROM missing_is_prev_oth_complications
     UNION ALL
     SELECT * FROM missing_oth_complications
+    UNION ALL
+    SELECT * FROM missing_second_bp_systolic
+    UNION ALL
+    SELECT * FROM invalid_second_bp_systolic
+    UNION ALL
+    SELECT * FROM missing_second_bp_diastolic
+    UNION ALL
+    SELECT * FROM invalid_second_bp_diastolic
+    UNION ALL
+    SELECT * FROM missing_fundal_height_wks
+    UNION ALL
+    SELECT * FROM invalid_fundal_height_wks
+    UNION ALL
+    SELECT * FROM missing_foetal_presentation
+    UNION ALL
+    SELECT * FROM missing_foetal_lie
+    UNION ALL
+    SELECT * FROM missing_foetal_station
+    UNION ALL
+    SELECT * FROM invalid_foetal_station
+    UNION ALL
+    SELECT * FROM missing_foetal_descent
+    UNION ALL
+    SELECT * FROM invalid_foetal_descent
+    UNION ALL
+    SELECT * FROM missing_is_fhr_heard
+    UNION ALL
+    SELECT * FROM missing_is_twin_preg
+    UNION ALL
+    SELECT * FROM missing_fhr_heard_per_min
+    UNION ALL
+    SELECT * FROM invalid_fhr_heard_per_min
+    UNION ALL
+    SELECT * FROM missing_fhr_heard_per_min_2
+    UNION ALL
+    SELECT * FROM invalid_fhr_heard_per_min_2
+    UNION ALL
+    SELECT * FROM missing_fhr_heard_per_min_3
+    UNION ALL
+    SELECT * FROM invalid_fhr_heard_per_min_3
+    UNION ALL
+    SELECT * FROM missing_vaginal_dilatation_cm
+    UNION ALL
+    SELECT * FROM invalid_vaginal_dilatation_cm
+    UNION ALL
+    SELECT * FROM missing_vaginal_length_cm
+    UNION ALL
+    SELECT * FROM invalid_vaginal_length_cm
+    UNION ALL
+    SELECT * FROM missing_cervical_consistency
+    -- UNION ALL
+    -- SELECT * FROM missing_cervical_consistency_oth
+    UNION ALL
+    SELECT * FROM missing_cervical_position
+    UNION ALL
+    SELECT * FROM missing_is_uterine_scar
+    UNION ALL
+    SELECT * FROM missing_uterine_scar_specify
+    UNION ALL
+    SELECT * FROM missing_uterine_scar_specify_oth
+    UNION ALL
+    SELECT * FROM missing_count_uterine_scar
+    UNION ALL
+    SELECT * FROM invalid_count_uterine_scar
+    UNION ALL
+    SELECT * FROM missing_is_rom_at_adm
+    UNION ALL
+    SELECT * FROM missing_rom_duration_value
+    UNION ALL
+    SELECT * FROM invalid_rom_duration_value
+    UNION ALL
+    SELECT * FROM missing_rom_duration_unit
+    UNION ALL
+    SELECT * FROM missing_is_liquor_clear
+    UNION ALL
+    SELECT * FROM missing_is_liquor_offensive
+    UNION ALL
+    SELECT * FROM missing_is_meconium_present
+    UNION ALL
+    SELECT * FROM missing_meconium_grade
+    UNION ALL
+    SELECT * FROM missing_is_adm_physical_exam
+    UNION ALL
+    SELECT * FROM missing_adm_stage_labour
+UNION ALL
+SELECT * FROM missing_admitting_clinician_name
+UNION ALL
+SELECT * FROM missing_date_sign_admitting_clin
+UNION ALL
+SELECT * FROM future_date_sign_admitting_clin
+UNION ALL
+SELECT * FROM missing_time_sign_adm_clinician
+UNION ALL
+SELECT * FROM invalid_time_sign_adm_clinician
+UNION ALL
+SELECT * FROM missing_adm_clin_sign_time
+UNION ALL
+SELECT * FROM missing_is_monitoring_chart
+UNION ALL
+SELECT * FROM missing_lbr_monitoring_date
+UNION ALL
+SELECT * FROM future_lbr_monitoring_date
+UNION ALL
+SELECT * FROM missing_lbr_monitoring_time
+UNION ALL
+SELECT * FROM invalid_lbr_monitoring_time
+UNION ALL
+SELECT * FROM missing_lbr_monitoring_time_unit
+UNION ALL
+SELECT * FROM missing_monitoring_clinician_name
+UNION ALL
+SELECT * FROM missing_lbr_bp_systolic
+UNION ALL
+SELECT * FROM invalid_lbr_bp_systolic
+UNION ALL
+SELECT * FROM missing_lbr_bp_diastolic
+UNION ALL
+SELECT * FROM invalid_lbr_bp_diastolic
+UNION ALL
+SELECT * FROM missing_lbr_spo
+UNION ALL
+SELECT * FROM invalid_lbr_spo
+UNION ALL
+SELECT * FROM missing_lbr_resp_rate
+UNION ALL
+SELECT * FROM invalid_lbr_resp_rate
+UNION ALL
+SELECT * FROM missing_lbr_temp
+UNION ALL
+SELECT * FROM invalid_lbr_temp
+UNION ALL
+SELECT * FROM missing_lbr_heart_rate
+UNION ALL
+SELECT * FROM invalid_lbr_heart_rate
+UNION ALL
+SELECT * FROM missing_lbr_fhr_monitoring_method
+UNION ALL
+SELECT * FROM missing_is_lbr_fhr_present
+UNION ALL
+SELECT * FROM missing_lbr_fhr_regularity
+UNION ALL
+SELECT * FROM missing_is_lbr_twin_preg
+UNION ALL
+SELECT * FROM missing_lbr_fhr_bpm
+UNION ALL
+SELECT * FROM invalid_lbr_fhr_bpm
+UNION ALL
+SELECT * FROM missing_lbr_fhr_bpm_2
+UNION ALL
+SELECT * FROM invalid_lbr_fhr_bpm_2
+UNION ALL
+SELECT * FROM missing_lbr_fhr_bpm_3
+UNION ALL
+SELECT * FROM invalid_lbr_fhr_bpm_3
+UNION ALL
+SELECT * FROM missing_lbr_foetal_presentation
+UNION ALL
+SELECT * FROM missing_lbr_foetal_lie
+UNION ALL
+SELECT * FROM missing_lbr_foetal_station
+UNION ALL
+SELECT * FROM invalid_lbr_foetal_station
+UNION ALL
+SELECT * FROM missing_lbr_foetal_descent
+UNION ALL
+SELECT * FROM invalid_lbr_foetal_descent
+UNION ALL
+SELECT * FROM missing_is_lbr_contractions
+UNION ALL
+SELECT * FROM missing_lbr_vaginal_dilatation_cm
+UNION ALL
+SELECT * FROM invalid_lbr_vaginal_dilatation_cm
+UNION ALL
+SELECT * FROM missing_lbr_vaginal_length_cm
+UNION ALL
+SELECT * FROM invalid_lbr_vaginal_length_cm
+UNION ALL
+SELECT * FROM missing_cervical_consistency_lbr
+-- UNION ALL
+-- SELECT * FROM missing_cervical_consistcy_lb_oth
+UNION ALL
+SELECT * FROM missing_cervical_position_lbr
+UNION ALL
+SELECT * FROM missing_is_lbr_vaginal_discharge
+UNION ALL
+SELECT * FROM missing_lbr_vaginal_disch_type
+UNION ALL
+SELECT * FROM missing_lbr_discharge_oth
+UNION ALL
+SELECT * FROM missing_is_lbr_liquor_clear
+UNION ALL
+SELECT * FROM missing_is_lbr_msl
+UNION ALL
+SELECT * FROM missing_lbr_msl_grade
+UNION ALL
+SELECT * FROM missing_is_lbr_liq_smelling
+UNION ALL
+SELECT * FROM missing_lbr_stage_labour
+UNION ALL
+SELECT * FROM missing_is_lbr_arm_performed
+UNION ALL
+SELECT * FROM missing_is_lbr_augmented
+UNION ALL
+SELECT * FROM missing_is_lbr_aug_oxitocin
+UNION ALL
+SELECT * FROM missing_is_lbr_induced
+UNION ALL
+SELECT * FROM missing_lbr_induction_type
+UNION ALL
+SELECT * FROM missing_is_misoprostol_lbr
+UNION ALL
+SELECT * FROM missing_misoprostol_lbr_route
+UNION ALL
+SELECT * FROM missing_is_glandin_lbr
+UNION ALL
+SELECT * FROM missing_glandin_lbr_route
+UNION ALL
+SELECT * FROM missing_is_vagiprost_lbr
+UNION ALL
+SELECT * FROM missing_vagiprost_lbr_route
+UNION ALL
+SELECT * FROM missing_lbr_induction_uterotonics
+UNION ALL
+SELECT * FROM missing_lbr_inductn_uterotonc_oth
 
 
 
