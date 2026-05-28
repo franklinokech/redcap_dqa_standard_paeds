@@ -1,0 +1,57 @@
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# R files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+renv/library/
+renv/staging/
+renv/local/
+renv/python/
+renv/.cache/
+.Rprofile
+
+# Data directories (will be mounted as volumes)
+cin_maternal/data/raw/
+cin_maternal/data/processed/
+cin_maternal/data/output/
+cin_maternal/logs/
+
+# System files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Documentation
+README.md
+LICENSE
+*.Rproj
+
+# Docker files
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Environment files (copy .env separately)
+.env
+.env.local
+.env.*.local
+
+# Scripts (will be included)
+# run_dqa.sh
+# run_dqa_launcher.R
+
+# Test files
+tests/
+testthat.R

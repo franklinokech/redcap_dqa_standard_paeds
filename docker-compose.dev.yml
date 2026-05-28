@@ -1,0 +1,33 @@
+# =============================================================================
+# Development Docker Compose - with code mounting for testing
+# =============================================================================
+
+version: '3.8'
+
+services:
+  dqa-dev:
+    build: .
+    container_name: cin_maternal_dqa_dev
+    environment:
+      - REDCAP_URL=${REDCAP_URL}
+      - REDCAP_CIN_MATERNAL_API_TOKEN=${REDCAP_CIN_MATERNAL_API_TOKEN}
+      - DQA_START_DATE=${DQA_START_DATE:-2025-09-08}
+      - DQA_END_DATE=${DQA_END_DATE:-2026-05-27}
+      - DATA_SOURCE=${DATA_SOURCE:-redcap}
+    env_file:
+      - .env
+    volumes:
+      # Mount everything for development
+      - .:/app
+      - ./cin_maternal/data/raw:/app/cin_maternal/data/raw
+      - ./cin_maternal/data/processed:/app/cin_maternal/data/processed
+      - ./cin_maternal/data/output:/app/cin_maternal/data/output
+      - ./cin_maternal/logs:/app/cin_maternal/logs
+    restart: "no"
+    command: ["Rscript", "/app/cin_maternal/scripts/run_dqa.R"]
+    networks:
+      - dqa_network
+
+networks:
+  dqa_network:
+    driver: bridge
