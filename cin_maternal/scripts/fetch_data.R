@@ -29,7 +29,15 @@ RAW_DATA_FILE <- file.path(RAW_DATA_DIR, "maternal_data.csv")
 # REDCap configuration
 REDCAP_API_TOKEN <- Sys.getenv("REDCAP_CIN_MATERNAL_API_TOKEN")
 REDCAP_URL <- Sys.getenv("REDCAP_URL")
-START_DATE <- Sys.getenv("DATA_START_DATE", "2025-09-08")
+
+# FIXED: Use correct environment variable name
+START_DATE <- Sys.getenv("DQA_START_DATE", "2025-09-08")
+
+# Debug output
+message("\n=== Fetch Data Configuration ===")
+message("Start Date: ", START_DATE)
+message("REDCap URL: ", REDCAP_URL)
+message("================================\n")
 
 # ------------------------------------------------------------------------------
 # Helper functions

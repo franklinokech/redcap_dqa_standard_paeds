@@ -5,7 +5,7 @@
 services:
   dqa:
     build: .
-    container_name: cin_maternal_dqa
+    container_name: cin_maternal_standard_dqa
     environment:
       - REDCAP_URL=${REDCAP_URL}
       - REDCAP_CIN_MATERNAL_API_TOKEN=${REDCAP_CIN_MATERNAL_API_TOKEN}

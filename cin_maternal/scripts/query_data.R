@@ -7,10 +7,31 @@
 # ------------------------------------------------------------------------------
 # Dependencies
 # ------------------------------------------------------------------------------
+library(dotenv)
+library(here)
 library(duckdb)
 library(DBI)
 library(glue)
 library(dplyr)
+
+# ------------------------------------------------------------------------------
+# Load Environment Variables
+# ------------------------------------------------------------------------------
+
+# Find and load .env file
+env_file <- here::here(".env")
+if (file.exists(env_file)) {
+  dotenv::load_dot_env(env_file)
+  message("✓ Loaded environment from: ", env_file)
+} else {
+  warning("⚠ .env file not found at: ", env_file)
+}
+
+# Debug: Show loaded values
+message("\n=== DQA Configuration ===")
+message("Start Date: ", Sys.getenv("DQA_START_DATE"))
+message("End Date: ", Sys.getenv("DQA_END_DATE"))
+message("========================\n")
 
 # ------------------------------------------------------------------------------
 # Helper Functions
@@ -39,9 +60,21 @@ get_project_root <- function() {
 get_config <- function() {
   project_root <- get_project_root()
   
+  # Get dates from environment variables (no hardcoded fallbacks)
+  start_date <- Sys.getenv("DQA_START_DATE")
+  end_date <- Sys.getenv("DQA_END_DATE")
+  
+  # Validate dates are set
+  if (start_date == "") {
+    stop("DQA_START_DATE environment variable is not set. Please check your .env file.")
+  }
+  if (end_date == "") {
+    stop("DQA_END_DATE environment variable is not set. Please check your .env file.")
+  }
+  
   list(
-    start_date = Sys.getenv("DQA_START_DATE", "2025-09-08"),
-    end_date = Sys.getenv("DQA_END_DATE", "2026-05-27"),
+    start_date = start_date,
+    end_date = end_date,
     db_path = Sys.getenv("DUCKDB_PATH", 
       file.path(project_root, "cin_maternal", "data", "processed", "maternal.duckdb")),
     output_dir = Sys.getenv("DQA_OUTPUT_DIR",
@@ -207,6 +240,7 @@ run_dqa_queries <- function() {
   cat("Started at:", format(start_time), "\n")
   cat("Project:", config$project_name, "\n")
   cat("Working directory:", getwd(), "\n")
+  cat("Date range:", config$start_date, "to", config$end_date, "\n")
   cat(strrep("=", 60), "\n\n")
   
   # Validate database exists

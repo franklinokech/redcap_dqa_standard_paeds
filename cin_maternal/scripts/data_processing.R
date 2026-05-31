@@ -27,8 +27,8 @@ PROCESSED_DIR <- here::here("cin_maternal", "data", "processed")
 REPEATING_DIR <- file.path(PROCESSED_DIR, "repeating")
 
 # Processing options
-REMOVE_EMPTY_ROWS <- TRUE
-REMOVE_EMPTY_COLS <- TRUE
+REMOVE_EMPTY_ROWS <- FALSE
+REMOVE_EMPTY_COLS <- FALSE
 REPORT_PROGRESS <- TRUE
 
 # ------------------------------------------------------------------------------
