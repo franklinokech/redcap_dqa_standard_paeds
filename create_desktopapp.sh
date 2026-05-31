@@ -1,14 +1,14 @@
 #!/bin/bash
-cat > ~/Desktop/RUN_CIN_MNH_STANDARD_DQA.desktop << 'EOF'
+cat > ~/Desktop/RUN_CIN_NEON_STANDARD_DQA.desktop << 'EOF'
 [Desktop Entry]
 Version=1.0
-Name=CIN Standard Maternal DQA
+Name=CIN Standard Neonatal DQA
 Comment=Run DQA
-Exec=/home/bob/hsuApps/docker/redcap_dqa_standard_mnh/run_dqa.sh
+Exec=/home/bob/hsuApps/docker/redcap_dqa_standard_neon/run_dqa.sh
 Icon=utilities-terminal
 Terminal=true
 Type=Application
 Categories=Office;
 EOF
 
-chmod +x ~/Desktop/RUN_DQA.desktop
+chmod +x ~/Desktop/RUN_CIN_NEON_STANDARD_DQA.desktop

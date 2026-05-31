@@ -1,5 +1,5 @@
 # ==============================================================================
-# Project: CIN Maternal
+# Project: CIN Neonatal
 # Script: query_data.R
 # Description: Run DQA queries against DuckDB and generate issue reports
 # ==============================================================================
@@ -45,7 +45,7 @@ get_project_root <- function() {
   # Walk up until we find a marker file
   while (!file.exists(file.path(current_dir, ".git")) &&
          !file.exists(file.path(current_dir, ".Rproj.user")) &&
-         !file.exists(file.path(current_dir, "cin_maternal"))) {
+         !file.exists(file.path(current_dir, "cin_neon"))) {
     new_dir <- dirname(current_dir)
     if (new_dir == current_dir) {
       # Reached root, use working directory
@@ -76,12 +76,12 @@ get_config <- function() {
     start_date = start_date,
     end_date = end_date,
     db_path = Sys.getenv("DUCKDB_PATH", 
-      file.path(project_root, "cin_maternal", "data", "processed", "maternal.duckdb")),
+      file.path(project_root, "cin_neon", "data", "processed", "neonatal.duckdb")),
     output_dir = Sys.getenv("DQA_OUTPUT_DIR",
-      file.path(project_root, "cin_maternal", "data", "output")),
-    project_name = Sys.getenv("PROJECT_NAME", "cin_maternal"),
+      file.path(project_root, "cin_neon", "data", "output")),
+    project_name = Sys.getenv("PROJECT_NAME", "cin_neon"),
     sql_file = Sys.getenv("DQA_SQL_FILE",
-      file.path(project_root, "cin_maternal", "scripts", "sql", "dqa_queries.sql"))
+      file.path(project_root, "cin_neon", "scripts", "sql", "dqa_queries.sql"))
   )
 }
 
@@ -236,7 +236,7 @@ run_dqa_queries <- function() {
   config <- get_config()
   
   cat(strrep("=", 60), "\n")
-  cat("CIN MATERNAL - DQA QUERY PIPELINE\n")
+  cat("CIN Neonatal - DQA QUERY PIPELINE\n")
   cat("Started at:", format(start_time), "\n")
   cat("Project:", config$project_name, "\n")
   cat("Working directory:", getwd(), "\n")

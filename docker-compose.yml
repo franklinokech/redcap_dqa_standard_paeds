@@ -1,14 +1,14 @@
 # =============================================================================
-# CIN Maternal DQA - Docker Compose
+# CIN Neonatal DQA - Docker Compose
 # =============================================================================
 
 services:
   dqa:
     build: .
-    container_name: cin_maternal_standard_dqa
+    container_name: cin_neon_standard_dqa
     environment:
       - REDCAP_URL=${REDCAP_URL}
-      - REDCAP_CIN_MATERNAL_API_TOKEN=${REDCAP_CIN_MATERNAL_API_TOKEN}
+      - REDCAP_CIN_NEON_STANDARD_API_TOKEN=${REDCAP_CIN_NEON_STANDARD_API_TOKEN}
       - DQA_START_DATE=${DQA_START_DATE:-2025-09-08}
       - DQA_END_DATE=${DQA_END_DATE:-2026-05-27}
       - DATA_SOURCE=${DATA_SOURCE:-redcap}
@@ -16,11 +16,11 @@ services:
       - .env
     volumes:
       # Mount data directories for persistence
-      - ./cin_maternal/scripts:/app/cin_maternal/scripts
-      - ./cin_maternal/data/raw:/app/cin_maternal/data/raw
-      - ./cin_maternal/data/processed:/app/cin_maternal/data/processed
-      - ./cin_maternal/data/output:/app/cin_maternal/data/output
-      - ./cin_maternal/logs:/app/cin_maternal/logs
+      - ./cin_neon/scripts:/app/cin_neon/scripts
+      - ./cin_neon/data/raw:/app/cin_neon/data/raw
+      - ./cin_neon/data/processed:/app/cin_neon/data/processed
+      - ./cin_neon/data/output:/app/cin_neon/data/output
+      - ./cin_neon/logs:/app/cin_neon/logs
       - ./.env:/app/.env:ro
       # Mount common utilities
       - ./common:/app/common
