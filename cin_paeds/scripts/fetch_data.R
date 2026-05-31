@@ -1,7 +1,7 @@
 # ==============================================================================
-# Project: CIN Neonatal
+# Project: CIN Paediatrics
 # Script: fetch_data.R
-# Description: Fetches raw data from REDCap for the CIN Neonatal project
+# Description: Fetches raw data from REDCap for the CIN Paediatrics project
 # Author:
 # Date:
 # ==============================================================================
@@ -23,11 +23,11 @@ dotenv::load_dot_env(here::here(".env"))
 source(here::here("common", "utils.R"))
 
 # Define paths
-RAW_DATA_DIR <- here::here("cin_neon", "data", "raw")
-RAW_DATA_FILE <- file.path(RAW_DATA_DIR, "neonatal_data.csv")
+RAW_DATA_DIR <- here::here("cin_paeds", "data", "raw")
+RAW_DATA_FILE <- file.path(RAW_DATA_DIR, "paeds_data.csv")
 
 # REDCap configuration
-REDCAP_API_TOKEN <- Sys.getenv("REDCAP_CIN_NEON_STANDARD_API_TOKEN")
+REDCAP_API_TOKEN <- Sys.getenv("REDCAP_CIN_PAEDS_STANDARD_API_TOKEN")
 REDCAP_URL <- Sys.getenv("REDCAP_URL")
 
 # FIXED: Use correct environment variable name
@@ -53,7 +53,7 @@ ensure_raw_data_dir <- function() {
 
 #' Validate environment variables
 validate_env_vars <- function() {
-  required_vars <- c("REDCAP_CIN_NEON_STANDARD_API_TOKEN", "REDCAP_URL")
+  required_vars <- c("REDCAP_CIN_PAEDS_STANDARD_API_TOKEN", "REDCAP_URL")
   missing_vars <- character()
   
   for (var in required_vars) {
@@ -163,7 +163,7 @@ generate_summary <- function(data) {
 
 main <- function() {
   message(strrep("=", 60))
-  message("CIN Neonatal - Data Fetch Process")
+  message("CIN Paediatrics - Data Fetch Process")
   message("Started at: ", Sys.time())
   message(strrep("=", 60), "\n")
   
@@ -171,16 +171,16 @@ main <- function() {
   validate_env_vars()
   
   # Fetch data with retry logic
-  neonatal_data <- fetch_with_retry(
+  paeds_data <- fetch_with_retry(
     api_token = REDCAP_API_TOKEN,
     redcap_url = REDCAP_URL
   )
   
   # Save data
-  save_data(neonatal_data, RAW_DATA_FILE)
+  save_data(paeds_data, RAW_DATA_FILE)
   
   # Generate summary
-  generate_summary(neonatal_data)
+  generate_summary(paeds_data)
   
   message("\n✓ Fetch process completed successfully")
   message("Finished at: ", Sys.time())

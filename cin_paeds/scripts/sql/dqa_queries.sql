@@ -1,5 +1,5 @@
 -- =============================================================================
--- CIN Neonatal DQA Queries
+-- CIN Paediatrics DQA Queries
 -- Description: Comprehensive data quality assessment for neonatal records
 -- =============================================================================
 
@@ -12,9 +12,9 @@ WITH
         date_today,
         'document_source' AS variable,
         'Missing document_source' AS issue,
-        nar_used AS current_value
-      FROM neonatal_core
-      WHERE (nar_used IS NULL OR TRIM(nar_used) = '')
+        doc_source AS current_value
+      FROM paeds_core
+      WHERE (doc_source IS NULL OR TRIM(doc_source) = '')
         AND CAST(date_today AS TIMESTAMP) >= '2025-05-08 10:47:19'
     ),
 

@@ -1,7 +1,7 @@
 # ==============================================================================
-# Project: CIN Neonatal
+# Project: CIN Paediatrics
 # Script:  load_duckdb.R
-# Purpose: Load processed neonatal CSVs into DuckDB.
+# Purpose: Load processed paeds CSVs into DuckDB.
 #          One table per CSV; all columns stored as VARCHAR (typing deferred
 #          to downstream DuckDB queries).
 # ==============================================================================
@@ -20,9 +20,9 @@ library(tools)
 # ------------------------------------------------------------------------------
 
 # Path configuration
-DUCKDB_PATH <- here::here("cin_neon", "data", "processed", "neonatal.duckdb")
-NON_REPEATING <- here::here("cin_neon", "data", "processed", "non_repeating.csv")
-REPEATING_DIR <- here::here("cin_neon", "data", "processed", "repeating")
+DUCKDB_PATH <- here::here("cin_paeds", "data", "processed", "paeds.duckdb")
+NON_REPEATING <- here::here("cin_paeds", "data", "processed", "non_repeating.csv")
+REPEATING_DIR <- here::here("cin_paeds", "data", "processed", "repeating")
 
 # DuckDB performance settings
 MEMORY_LIMIT <- Sys.getenv("DUCKDB_MEMORY_LIMIT", "8GB")
@@ -189,9 +189,9 @@ load_csv_table <- function(con, table_name, csv_path) {
 load_core_table <- function(con, csv_path) {
   log_section("Loading core (non-repeating) data")
   
-  metadata <- load_csv_table(con, "neonatal_core", csv_path)
+  metadata <- load_csv_table(con, "paeds_core", csv_path)
   
-  log_kv("Table name", "neonatal_core")
+  log_kv("Table name", "paeds_core")
   log_kv("Rows loaded", metadata$row_count)
   log_kv("Columns loaded", metadata$col_count)
   log_kv("Load time", paste0(round(metadata$load_time, 2), " seconds"))
@@ -243,18 +243,18 @@ create_indexes <- function(con) {
   
   # Index on id in core table (most common join key)
   tryCatch({
-    DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_core_id ON neonatal_core(id)")
+    DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_core_id ON paeds_core(id)")
     log_success("Created index: idx_core_id")
   }, error = function(e) {
-    log_info("Could not create index on neonatal_core(id): ", e$message)
+    log_info("Could not create index on paeds_core(id): ", e$message)
   })
   
   # Index on date_today for date range queries
   tryCatch({
-    DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_core_datetime ON neonatal_core(date_today)")
+    DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_core_datetime ON paeds_core(date_today)")
     log_success("Created index: idx_core_datetime")
   }, error = function(e) {
-    log_info("Could not create index on neonatal_core(date_today): ", e$message)
+    log_info("Could not create index on paeds_core(date_today): ", e$message)
   })
   
   log_success("Index creation complete")
@@ -275,7 +275,7 @@ generate_summary <- function(con, core_metadata = NULL, repeating_metadata = lis
     total_rows <- total_rows + row_count
     
     # Determine if this is a core or repeating table
-    if (tbl == "neonatal_core" && !is.null(core_metadata)) {
+    if (tbl == "paeds_core" && !is.null(core_metadata)) {
       log_kv(tbl, paste0(row_count, " rows (core table)"))
     } else {
       col_count <- ncol(DBI::dbGetQuery(con, sprintf("SELECT * FROM %s LIMIT 1", dq(tbl))))
@@ -302,7 +302,7 @@ run_loading_pipeline <- function(
   start_time <- Sys.time()
   
   message(strrep("=", 60))
-  message("CIN NEONATAL - DUCKDB LOADING PIPELINE")
+  message("CIN Paediatrics - DUCKDB LOADING PIPELINE")
   message("Started at: ", start_time)
   message(strrep("=", 60))
   

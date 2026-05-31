@@ -47,15 +47,15 @@ RUN R -e "library(DBI); library(duckdb); con <- dbConnect(duckdb()); dbExecute(c
 COPY . .
 
 # Create necessary directories
-RUN mkdir -p /app/cin_neon/data/raw \
-    /app/cin_neon/data/processed \
-    /app/cin_neon/data/processed/repeating \
-    /app/cin_neon/data/output \
-    /app/cin_neon/logs
+RUN mkdir -p /app/cin_paeds/data/raw \
+    /app/cin_paeds/data/processed \
+    /app/cin_paeds/data/processed/repeating \
+    /app/cin_paeds/data/output \
+    /app/cin_paeds/logs
 
 # Make scripts executable
-RUN chmod +x /app/cin_neon/scripts/*.R 2>/dev/null || true
+RUN chmod +x /app/cin_paeds/scripts/*.R 2>/dev/null || true
 RUN chmod +x /app/*.sh 2>/dev/null || true
 
 # Default command
-CMD ["Rscript", "/app/cin_neon/scripts/run_dqa.R"]
+CMD ["Rscript", "/app/cin_paeds/scripts/run_dqa.R"]
