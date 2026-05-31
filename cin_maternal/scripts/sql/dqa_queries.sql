@@ -4329,6 +4329,9 @@ missing_is_monitoring_chart AS (
 
 
 
+
+
+
     -- combine all checks
     all_issues AS (
       SELECT * FROM missing_document_source
