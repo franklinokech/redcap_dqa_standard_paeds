@@ -1,7 +1,7 @@
 # ==============================================================================
-# Project: CIN Maternal
+# Project: CIN Neonatal
 # Script: data_processing.R
-# Purpose: Minimal processing of raw maternal REDCap data for DQA.
+# Purpose: Minimal processing of raw neonatal REDCap data for DQA.
 #          Splits repeating-instrument rows from non-repeating (root) rows and
 #          writes one CSV per instrument. Heavy lifting is handled downstream
 #          by DuckDB.
@@ -22,8 +22,8 @@ library(tools)
 # ------------------------------------------------------------------------------
 
 # Path configuration
-RAW_DATA_PATH <- here::here("cin_maternal", "data", "raw", "maternal_data.csv")
-PROCESSED_DIR <- here::here("cin_maternal", "data", "processed")
+RAW_DATA_PATH <- here::here("cin_neon", "data", "raw", "neonatal_data.csv")
+PROCESSED_DIR <- here::here("cin_neon", "data", "processed")
 REPEATING_DIR <- file.path(PROCESSED_DIR, "repeating")
 
 # Processing options
@@ -329,7 +329,7 @@ run_processing_pipeline <- function(
   start_time <- Sys.time()
   
   message(strrep("=", 60))
-  message("CIN MATERNAL - DATA PROCESSING PIPELINE")
+  message("CIN Neonatal - DATA PROCESSING PIPELINE")
   message("Started at: ", start_time)
   message(strrep("=", 60))
   

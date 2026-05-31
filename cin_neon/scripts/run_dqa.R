@@ -28,7 +28,7 @@ if (file.exists(env_file)) {
 
 cat("\n")
 cat("════════════════════════════════════════════════════════════\n")
-cat("         CIN MATERNAL - COMPLETE DQA PIPELINE\n")
+cat("         CIN NEONATAL - COMPLETE DQA PIPELINE\n")
 cat("════════════════════════════════════════════════════════════\n")
 cat("\n")
 cat("Data source:", Sys.getenv("DATA_SOURCE", "not set"), "\n")
@@ -45,12 +45,12 @@ cat("─────────────────────────
 data_source <- Sys.getenv("DATA_SOURCE", "local")
 
 if (data_source == "redcap") {
-  source("/app/cin_maternal/scripts/fetch_data.R")
+  source("/app/cin_neon/scripts/fetch_data.R")
   main()
   cat("\n")
 } else {
   cat("ℹ️  DATA_SOURCE = 'local' - Skipping REDCap fetch\n")
-  cat("   Using existing data from /app/cin_maternal/data/raw/\n\n")
+  cat("   Using existing data from /app/cin_neon/data/raw/\n\n")
 }
 
 # =============================================================================
@@ -59,7 +59,7 @@ if (data_source == "redcap") {
 cat("🔄 STEP 2: Processing data\n")
 cat("────────────────────────────────────────────────────────────\n")
 
-source("/app/cin_maternal/scripts/data_processing.R")
+source("/app/cin_neon/scripts/data_processing.R")
 run_processing_pipeline()
 cat("\n")
 
@@ -69,7 +69,7 @@ cat("\n")
 cat("💾 STEP 3: Loading data into DuckDB\n")
 cat("────────────────────────────────────────────────────────────\n")
 
-source("/app/cin_maternal/scripts/load_duckdb.R")
+source("/app/cin_neon/scripts/load_duckdb.R")
 run_loading_pipeline()
 cat("\n")
 
@@ -79,14 +79,14 @@ cat("\n")
 cat("📊 STEP 4: Running DQA queries\n")
 cat("────────────────────────────────────────────────────────────\n")
 
-source("/app/cin_maternal/scripts/query_data.R")
+source("/app/cin_neon/scripts/query_data.R")
 result <- run_dqa_queries()
 cat("\n")
 
 # =============================================================================
 # Summary
 # =============================================================================
-output_dir <- "/app/cin_maternal/data/output"
+output_dir <- "/app/cin_neon/data/output"
 
 cat("\n")
 cat("════════════════════════════════════════════════════════════\n")
@@ -107,4 +107,4 @@ cat("\n")
 cat("════════════════════════════════════════════════════════════\n")
 
 # Instead of system(paste("xdg-open", ...))
-system("/app/cin_maternal/scripts/open_results.sh", wait = FALSE)
+system("/app/cin_neon/scripts/open_results.sh", wait = FALSE)

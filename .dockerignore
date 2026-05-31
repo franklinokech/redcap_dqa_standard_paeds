@@ -16,10 +16,10 @@ renv/.cache/
 .Rprofile
 
 # Data directories (will be mounted as volumes)
-cin_maternal/data/raw/
-cin_maternal/data/processed/
-cin_maternal/data/output/
-cin_maternal/logs/
+cin_neon/data/raw/
+cin_neon/data/processed/
+cin_neon/data/output/
+cin_neon/logs/
 
 # System files
 .DS_Store
